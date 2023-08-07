@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "name": "Appointment",
+      "url": "/dashboard",
+      "icon": "icofont-calendar"
+    },
+    {
+      "name": "Scheduling",
+      "url": "/ad",
+      "icon": "icofont-calendar",
+      "children": [
+        {
+          "name": "Create Schedule",
+          "url": "/createSchedule"
+        },
+        {
+          "name": "All Schedules",
+          "url": "/allSchedules"
+        }
+      ]
+    },
+    {
+      "name": "Patient",
+      "icon": "icofont-business-man-alt-1",
+      "children": [
+        {
+          "name": "Add Patient",
+          "url": "/addPatient"
+        },
+        {
+          "name": "All Patients",
+          "url": "/allPatients"
+        }
+      ]
+    }
+  ]
+}

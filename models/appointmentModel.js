@@ -1,0 +1,44 @@
+import mongoose from "mongoose";
+
+const appointmentSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please enter the name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please enter the email"],
+    },
+    phone: {
+      type: Number,
+      required: [true, "Please enter the phone number"],
+    },
+    age: {
+      type: Number,
+      required: [true, "Please enter the age"],
+    },
+    date: {
+      type: Date,
+      required: [true, "Please enter the date"],
+    },
+    time: {
+      type: String,
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ["pending", "rejected", "approved"],
+      default: "pending",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const Appointment =
+  mongoose.models.Appointment ||
+  mongoose.model("Appointment", appointmentSchema);
+
+export default Appointment;
