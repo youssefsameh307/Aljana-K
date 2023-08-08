@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
+
 function DashboardAllPatients() {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     fetchPatients();
@@ -41,12 +43,44 @@ function DashboardAllPatients() {
     }
   };
 
+  useEffect(() => { console.log(query) }, [query])
+  const searchFilter = (myQuery, questions = []) => {
+    //increase search capabilities, extend to category and tags 
+    if (myQuery) {
+      const result = questions.filter((item) => {
+        const { _id, __v, ...rest } = item;
+        return Object.values(rest).some((x) => x.includes(myQuery))
+      })
+      return result
+    }
+    else
+      return questions
+  }
+
+  const filteredPatients = searchFilter(query, patients);
+
   return (
     <>
       <div className="dashboard_apppointment">
         <h3 className="mb-0">All Patients</h3>
 
-        <div className="mt-5">
+
+        <input placeholder="search..." className="tw-w-full tw-p-3 tw-drop-shadow-md tw-bg-white tw-rounded tw-border-gray-800 tw-border-2 tw-mt-6" onChange={(x) => setQuery(x.target.value)}>
+
+        </input>
+
+        {/* <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          id="filled-basic" label="Search..." variant="filled" onChange={(x) => setQuery(x.target.value)} className='tw-w-full'>
+        </TextField> */}
+
+        <div className="mt-4">
           {errorMessage && (
             <div className="alert alert-danger" role="alert">
               {errorMessage}
@@ -66,7 +100,6 @@ function DashboardAllPatients() {
               <table className="table">
                 <thead>
                   <tr>
-                  <th>ID</th>
                     <th scope="col">Image</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
@@ -77,10 +110,9 @@ function DashboardAllPatients() {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patient) => (
+                  {filteredPatients.map((patient) => (
                     <tr key={patient._id}>
-                    <td>{patient._id}</td>
-                    <td>
+                      <td>
                         {patient.image && (
                           <img
                             src={patient.image}
@@ -97,10 +129,10 @@ function DashboardAllPatients() {
                       <td>
                         <div className="actions">
                           <button>
-                          <Link style={{color: "white"}} href={`/updatePatient/${patient._id}`}>
-                          <i className="icofont-ui-edit"></i>
-                          </Link>
-                            
+                            <Link style={{ color: "white" }} href={`/updatePatient/${patient._id}`}>
+                              <i className="icofont-ui-edit"></i>
+                            </Link>
+
                           </button>
                           <button onClick={() => handleDelete(patient._id)}>
                             <i className="icofont-ui-delete"></i>
