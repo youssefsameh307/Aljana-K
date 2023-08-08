@@ -11,7 +11,6 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       // Extract user credentials from the request body
       const { email, password } = req.body;
-
       // Find the user by email
       const user = await User.findOne({ email }).select('+password');;
 

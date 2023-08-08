@@ -34,13 +34,28 @@ const SignUpForm = () => {
     setErrorMessage("");
 
     try {
-      const response = await axios.post("/api/user/register", {
-        firstName,
-        lastName,
-        email,
-        phone,
-        password,
+
+      const response = await fetch("/api/user/register2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          password,
+        }),
       });
+
+      // const response = await axios.post("/api/user/register", {
+      //   firstName,
+      //   lastName,
+      //   email,
+      //   phone,
+      //   password,
+      // });
 
       setLoading(false);
       setSuccessMessage(response.data.message);
@@ -53,8 +68,9 @@ const SignUpForm = () => {
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
+      console.log(error)
       setLoading(false);
-      setErrorMessage(error.response.data.error);
+      setErrorMessage("error");
     }
   };
 

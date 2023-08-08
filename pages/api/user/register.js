@@ -32,59 +32,57 @@ export const config = {
   },
 };
 
-export default isAuthenticated(
-  authorizeRole(['secretary', 'doctor'])(
-    async function handler(req, res) {
-      try {
-        await connectMongo();
+export default async function handler(req, res) {
 
-        if (req.method === 'POST') {
-          upload(req, res, async function (err) {
-            if (err) {
-              console.error(err);
-              return res.status(500).json({ error: 'Error uploading the image' });
-            }
+  try {
+    await connectMongo()
+    console.log(req.body);
 
-            // Check if any of the required fields are missing or empty
-            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'password', 'role'];
-            for (const field of requiredFields) {
-              if (!req.body[field]) {
-                return res.status(400).json({ message: `${field} is required` });
-              }
-            }
-
-            // Create a new instance of the User model with the user data
-            const userFields = {
-              firstName: req.body.firstName,
-              lastName: req.body.lastName,
-              email: req.body.email,
-              phone: req.body.phone,
-              password: req.body.password,
-              role: req.body.role,
-            };
-
-            // If an image was uploaded, upload it to Cloudinary and get the URL
-            if (req.file) {
-              const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
-              userFields.image = imageResult.secure_url;
-            }
-
-            const user = new User(userFields);
-
-            // Save the user in the database
-            const registeredUser = await user.save();
-
-            res.status(201).json({
-              registeredUser,
-            });
-          });
-        } else {
-          res.status(405).json({ message: 'Method Not Allowed' });
+    if (req.method === 'POST') {
+      upload(req, res, async function (err) {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: 'Error uploading the image' });
         }
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
+
+        // Check if any of the required fields are missing or empty
+        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'password', 'role'];
+        for (const field of requiredFields) {
+          if (!(req.body?.[field] || false)) {
+            return res.status(400).json({ message: `${field} is required` });
+          }
+        }
+
+        // Create a new instance of the User model with the user data
+        const userFields = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          phone: req.body.phone,
+          password: req.body.password,
+          role: req.body.role,
+        };
+
+        // If an image was uploaded, upload it to Cloudinary and get the URL
+        if (req.file) {
+          const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
+          userFields.image = imageResult.secure_url;
+        }
+
+        const user = new User(userFields);
+
+        // Save the user in the database
+        const registeredUser = await user.save();
+
+        res.status(201).json({
+          registeredUser,
+        });
+      });
+    } else {
+      res.status(405).json({ message: 'Method Not Allowed' });
     }
-  )
-);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
