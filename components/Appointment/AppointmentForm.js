@@ -11,7 +11,7 @@ const AppointmentForm = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [schedules, setSchedules] = useState([]);
-  const [selectedTime, setSelectedTime] = useState("");
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -37,29 +37,32 @@ const AppointmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       setLoading(true);
       setError("");
       setSuccessMessage("");
-  
+
       const appointmentData = {
         name,
         email,
         phone,
         age,
         date,
-        time: selectedTime, // Include the selectedTime in the appointment data
+        time: time, // Include the selectedTime in the appointment data
       };
-  
-      const response = await axios.post("/api/appointment/create", appointmentData);
-      setName('');
-      setEmail('');
-      setAge('');
-      setPhone('');
-      setDate('');
-      setSelectedTime(''); // Clear the selectedTime state after submission
-  
+
+      const response = await axios.post(
+        "/api/appointment/create",
+        appointmentData
+      );
+      setName("");
+      setEmail("");
+      setAge("");
+      setPhone("");
+      setDate("");
+      setSelectedTime(""); // Clear the selectedTime state after submission
+
       setLoading(false);
       setSuccessMessage("Appointment request sent successfully.");
     } catch (error) {
@@ -68,7 +71,6 @@ const AppointmentForm = () => {
       console.log(error);
     }
   };
-  
 
   return (
     <>
@@ -152,35 +154,14 @@ const AppointmentForm = () => {
                       <div className="col-lg-6">
                         <div className="form-group">
                           <i className="icofont-calendar"></i>
-                          <label>Date</label>
+                          <label>Time</label>
                           <input
-                            type="date"
+                            type="datetime-local"
                             className="form-control"
-                            placeholder="Your Age"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                            placeholder="Time of appointment"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
                           />
-                        </div>
-                      </div>
-
-                      {/* Select Time Field */}
-                      <div className="col-lg-6">
-                        <div className="form-group">
-                          <i className="icofont-clock-time"></i>
-                          <label>Select Time</label>
-                          <select
-                            className="form-control"
-                            value={selectedTime}
-                            onChange={(e) => setSelectedTime(e.target.value)}
-                          >
-                            <option value="">Select Time</option>
-                            {/* Assuming "schedules" contains the list of available time slots */}
-                            {schedules.map((schedule) => (
-                              <option key={schedule._id} value={`${schedule.startTime}AM - ${schedule.startTime}PM`}>
-                                {`${schedule.startTime}AM - ${schedule.startTime}PM`}
-                              </option>
-                            ))}
-                          </select>
                         </div>
                       </div>
                     </div>
@@ -206,7 +187,10 @@ const AppointmentForm = () => {
                   <ul>
                     {schedules.map((schedule) => (
                       <li key={schedule._id}>
-                        {schedule.day} <span>{schedule.startTime}PM - {schedule.endTime}AM</span>
+                        {schedule.day}{" "}
+                        <span>
+                          {schedule.startTime}PM - {schedule.endTime}AM
+                        </span>
                       </li>
                     ))}
                   </ul>

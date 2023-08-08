@@ -4,6 +4,7 @@ import User from "../../../models/userModel";
 import connectMongo from "../../../utils/database";
 import isAuthenticated from "../../../utils/isAuthenticated";
 import authorizeRole from "../../../utils/authorizeRole";
+import {checkRequiredFields, missingFields} from "../../../utils/checkRequiredFields";
 import multer from "multer";
 import path from "path";
 import cloudinary from "cloudinary";
@@ -35,20 +36,12 @@ export const config = {
 export default async function handler(req, res) {
   try {
     await connectMongo();
-    console.log(req, req.body);
     if (req.method === "POST") {
-      // Check if any of the required fields are missing or empty
-      const requiredFields = [
-        "firstName",
-        "lastName",
-        "email",
-        "phone",
-        "password",
-      ];
-      for (const field of requiredFields) {
-        if (!req.body[field]) {
-          return res.status(400).json({ message: `${field} is required` });
-        }
+      
+      // Check that all required fields to create are present
+      if (!checkRequiredFields(req, User)) {
+        let fields = missingFields(req, User)
+        return res.status(400).json({ message: `${fields} is required` });
       }
 
       // Create a new instance of the User model with the user data

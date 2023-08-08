@@ -4,12 +4,19 @@ import Appointment from "../../../models/appointmentModel";
 import AppointmentRequest from "../../../models/appointmentRequestModel";
 import connectMongo from "../../../utils/database";
 import isAuthenticated from "../../../utils/isAuthenticated";
-
+import {checkRequiredFields, missingFields} from "../../../utils/checkRequiredFields";
 export default isAuthenticated(async function handler(req, res) {
   try {
     await connectMongo();
 
     if (req.method === "POST") {
+
+      // Check that all required fields to create are present
+      if (!checkRequiredFields(req, Appointment)) {
+        let fields = missingFields(req, Appointment);
+        return res.status(400).json({ message: `${fields} is required` });
+      }
+
       const { name, email, phone, time, age, date } = req.body;
 
       // Create a new appointment
@@ -19,7 +26,7 @@ export default isAuthenticated(async function handler(req, res) {
         phone,
         age,
         time,
-        date
+        date,
       });
       await newAppointment.save();
 

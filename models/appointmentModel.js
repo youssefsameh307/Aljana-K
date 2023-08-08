@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Date } from "mongoose";
 
 const appointmentSchema = new mongoose.Schema(
   {
@@ -18,12 +19,9 @@ const appointmentSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please enter the age"],
     },
-    date: {
-      type: Date,
-      required: [true, "Please enter the date"],
-    },
+
     time: {
-      type: String,
+      type: Date,
       required: true
     },
     status: {
