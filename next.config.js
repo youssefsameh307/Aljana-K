@@ -11,6 +11,7 @@ const nextConfig = {
     locales: ["en", "ar"],
     defaultLocale: "en",
   },
+  
 };
 
 module.exports = nextConfig;
