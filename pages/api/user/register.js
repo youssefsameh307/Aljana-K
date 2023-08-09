@@ -4,7 +4,7 @@ import User from "../../../models/userModel";
 import connectMongo from "../../../utils/database";
 import isAuthenticated from "../../../utils/isAuthenticated";
 import authorizeRole from "../../../utils/authorizeRole";
-import {checkRequiredFields, missingFields} from "../../../utils/checkRequiredFields";
+import { checkRequiredFields, missingFields } from "../../../utils/checkRequiredFields";
 import multer from "multer";
 import path from "path";
 import cloudinary from "cloudinary";
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
   try {
     await connectMongo();
     if (req.method === "POST") {
-      
+
       // Check that all required fields to create are present
       if (!checkRequiredFields(req, User)) {
         let fields = missingFields(req, User)
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
         email: req.body.email,
         phone: req.body.phone,
         password: req.body.password,
-        role: req.body.role,
+        role: "doctor",
       };
 
       // If an image was uploaded, upload it to Cloudinary and get the URL

@@ -1,28 +1,39 @@
-import mongoose from "mongoose";
-import { Date } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import User from "./userModel";
 
 const appointmentSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Please enter the name"],
+    patientId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      validate: {
+        validator: async (v) => {
+          const user = await User.findOne(v);
+          if (user && user.role === "patient")
+            return true;
+          else
+            return false
+        },
+        message: props => `this is not a valid patient`
+      },
     },
-    email: {
-      type: String,
-      required: [true, "Please enter the email"],
-    },
-    phone: {
-      type: Number,
-      required: [true, "Please enter the phone number"],
-    },
-    age: {
-      type: Number,
-      required: [true, "Please enter the age"],
-    },
-
     time: {
       type: Date,
       required: true
+    },
+    Assignee: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      validate: {
+        validator: async (v) => {
+          const user = await User.findOne(v);
+          if (user && user.role === "doctor")
+            return true;
+          else
+            return false
+        },
+        message: props => `this is not a valid doctor`
+      },
     },
     status: {
       type: String,
@@ -38,5 +49,6 @@ const appointmentSchema = new mongoose.Schema(
 const Appointment =
   mongoose.models.Appointment ||
   mongoose.model("Appointment", appointmentSchema);
+
 
 export default Appointment;
