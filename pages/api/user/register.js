@@ -2,11 +2,12 @@
 
 import User from "../../../models/userModel";
 import connectMongo from "../../../utils/database";
-import isAuthenticated from '../../../utils/isAuthenticated';
-import authorizeRole from '../../../utils/authorizeRole';
+import isAuthenticated from "../../../utils/isAuthenticated";
+import authorizeRole from "../../../utils/authorizeRole";
+import {checkRequiredFields, missingFields} from "../../../utils/checkRequiredFields";
 import multer from "multer";
 import path from "path";
-import cloudinary from 'cloudinary';
+import cloudinary from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -19,72 +20,59 @@ const storage = multer.diskStorage({
     cb(null, path.join(process.cwd(), "public", "images"));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
 });
 
-const upload = multer({ storage }).single('image');
+const upload = multer({ storage }).single("image");
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: true,
   },
 };
 
-export default isAuthenticated(
-  authorizeRole(['secretary', 'doctor'])(
-    async function handler(req, res) {
-      try {
-        await connectMongo();
-
-        if (req.method === 'POST') {
-          upload(req, res, async function (err) {
-            if (err) {
-              console.error(err);
-              return res.status(500).json({ error: 'Error uploading the image' });
-            }
-
-            // Check if any of the required fields are missing or empty
-            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'password', 'role'];
-            for (const field of requiredFields) {
-              if (!req.body[field]) {
-                return res.status(400).json({ message: `${field} is required` });
-              }
-            }
-
-            // Create a new instance of the User model with the user data
-            const userFields = {
-              firstName: req.body.firstName,
-              lastName: req.body.lastName,
-              email: req.body.email,
-              phone: req.body.phone,
-              password: req.body.password,
-              role: req.body.role,
-            };
-
-            // If an image was uploaded, upload it to Cloudinary and get the URL
-            if (req.file) {
-              const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
-              userFields.image = imageResult.secure_url;
-            }
-
-            const user = new User(userFields);
-
-            // Save the user in the database
-            const registeredUser = await user.save();
-
-            res.status(201).json({
-              registeredUser,
-            });
-          });
-        } else {
-          res.status(405).json({ message: 'Method Not Allowed' });
-        }
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+export default async function handler(req, res) {
+  try {
+    await connectMongo();
+    if (req.method === "POST") {
+      
+      // Check that all required fields to create are present
+      if (!checkRequiredFields(req, User)) {
+        let fields = missingFields(req, User)
+        return res.status(400).json({ message: `${fields} is required` });
       }
+
+      // Create a new instance of the User model with the user data
+      const userFields = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        password: req.body.password,
+        role: req.body.role,
+      };
+
+      // If an image was uploaded, upload it to Cloudinary and get the URL
+      if (req.file) {
+        const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
+        userFields.image = imageResult.secure_url;
+      }
+
+      const user = new User(userFields);
+
+      // Save the user in the database
+      const registeredUser = await user.save();
+
+      res.status(201).json({
+        registeredUser,
+      });
+    } else {
+      res.status(405).json({ message: "Method Not Allowed" });
     }
-  )
-);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}

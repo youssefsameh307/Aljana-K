@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { RecurrencePattern } from "../../utils/recurrencePatternEnum";
 
 const AppointmentForm = () => {
   const [name, setName] = useState("");
@@ -11,7 +12,10 @@ const AppointmentForm = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [schedules, setSchedules] = useState([]);
-  const [selectedTime, setSelectedTime] = useState("");
+  const [time, setTime] = useState("");
+  const [initialTime, setInitialTime] = useState("");
+  const [recurrencePattern, setRecurrencePattern] = useState(RecurrencePattern.NONE);
+  const [recurrencePatternLength, setRecurrencePatternLength] = useState(0)
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -37,29 +41,36 @@ const AppointmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       setLoading(true);
       setError("");
       setSuccessMessage("");
-  
+
+      
+
       const appointmentData = {
         name,
         email,
         phone,
         age,
         date,
-        time: selectedTime, // Include the selectedTime in the appointment data
+        time: time,
+        initialTime: initialTime,
+        recurrencePattern: recurrencePattern,
+        recurrencePatternLength: recurrencePatternLength,
       };
-  
-      const response = await axios.post("/api/appointment/create", appointmentData);
-      setName('');
-      setEmail('');
-      setAge('');
-      setPhone('');
-      setDate('');
-      setSelectedTime(''); // Clear the selectedTime state after submission
-  
+
+      const response = await axios.post(
+        "/api/appointment/create",
+        appointmentData
+      );
+      setName("");
+      setEmail("");
+      setAge("");
+      setPhone("");
+      setDate("");
+      setTime("");
       setLoading(false);
       setSuccessMessage("Appointment request sent successfully.");
     } catch (error) {
@@ -68,7 +79,6 @@ const AppointmentForm = () => {
       console.log(error);
     }
   };
-  
 
   return (
     <>
@@ -152,37 +162,71 @@ const AppointmentForm = () => {
                       <div className="col-lg-6">
                         <div className="form-group">
                           <i className="icofont-calendar"></i>
-                          <label>Date</label>
+                          <label>Time</label>
                           <input
-                            type="date"
+                            type="datetime-local"
                             className="form-control"
-                            placeholder="Your Age"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
+                            placeholder="Time of appointment"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
                           />
                         </div>
                       </div>
 
-                      {/* Select Time Field */}
-                      <div className="col-lg-6">
-                        <div className="form-group">
-                          <i className="icofont-clock-time"></i>
-                          <label>Select Time</label>
-                          <select
-                            className="form-control"
-                            value={selectedTime}
-                            onChange={(e) => setSelectedTime(e.target.value)}
-                          >
-                            <option value="">Select Time</option>
-                            {/* Assuming "schedules" contains the list of available time slots */}
-                            {schedules.map((schedule) => (
-                              <option key={schedule._id} value={`${schedule.startTime}AM - ${schedule.startTime}PM`}>
-                                {`${schedule.startTime}AM - ${schedule.startTime}PM`}
+                      <div className="col-lg-6 border border-info border-5 rounded">
+                        
+
+                        <div className="row-lg-6">
+                          <div className="form-group">
+                            <i className="icofont-calendar"></i>
+                            <label>Recurring Pattern</label>
+                            <select
+                              className="form-control"
+                              value={recurrencePattern}
+                              onChange={(e) =>
+                                setRecurrencePattern(e.target.value)
+                              }
+                              defaultValue={RecurrencePattern.NONE} // Set "None" as the default value
+                            >
+                              <option value={RecurrencePattern.NONE}>
+                                None
                               </option>
-                            ))}
-                          </select>
+                              <option value={RecurrencePattern.WEEK}>
+                                Every week
+                              </option>
+                              <option value={RecurrencePattern.MONTH}>
+                                Every month
+                              </option>
+                            </select>
+                          </div>
                         </div>
+                        {recurrencePattern === RecurrencePattern.NONE ? (
+                          <></>
+                        ) : (
+                          <div className="row-lg-6">
+                            <div className="form-group">
+                              <i className="icofont-calendar"></i>
+                              <label>
+                                {"Number of "}
+                                {recurrencePattern === RecurrencePattern.MONTH
+                                  ? "months"
+                                  : "weeks"}
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                min="1"
+                                max="10"
+                                placeholder="Number of recurence"
+                                value={recurrencePatternLength}
+                                onChange={(e) => setRecurrencePatternLength(e.target.value)}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
+
+                      <div className="col-lg-6"></div>
                     </div>
 
                     <div className="text-center">
@@ -206,7 +250,10 @@ const AppointmentForm = () => {
                   <ul>
                     {schedules.map((schedule) => (
                       <li key={schedule._id}>
-                        {schedule.day} <span>{schedule.startTime}PM - {schedule.endTime}AM</span>
+                        {schedule.day}{" "}
+                        <span>
+                          {schedule.startTime}PM - {schedule.endTime}AM
+                        </span>
                       </li>
                     ))}
                   </ul>
