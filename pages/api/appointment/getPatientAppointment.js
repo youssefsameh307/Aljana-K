@@ -1,3 +1,4 @@
+import Appointment from "../../../models/appointmentModel";
 import AppointmentRequest from "../../../models/appointmentRequestModel";
 import authorizeRole from "../../../utils/authorizeRole";
 import connectMongo from "../../../utils/database";
@@ -5,13 +6,13 @@ import isAuthenticated from "../../../utils/isAuthenticated";
 
 
 
-export default isAuthenticated(authorizeRole(["secretary"])( async function handler(req, res) {
+export default isAuthenticated(authorizeRole(["secretary", "doctor"])(async function handler(req, res) {
   try {
     await connectMongo();
 
     if (req.method === "GET") {
-      const patientAppointment = await AppointmentRequest.find().populate("appointment").populate("patient")
-      
+      const patientAppointment = await Appointment.find()
+
       res.status(200).json({
         patientAppointment
       });

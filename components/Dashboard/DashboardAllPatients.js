@@ -100,6 +100,7 @@ function DashboardAllPatients() {
               <table className="table">
                 <thead>
                   <tr>
+                    <th>ID</th>
                     <th scope="col">Image</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
@@ -112,6 +113,7 @@ function DashboardAllPatients() {
                 <tbody>
                   {filteredPatients.map((patient) => (
                     <tr key={patient._id}>
+                      <td>{patient._id}</td>
                       <td>
                         {patient.image && (
                           <img

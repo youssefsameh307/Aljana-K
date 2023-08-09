@@ -21,12 +21,9 @@ export default isAuthenticated(async function handler(req, res) {
       }
 
       const {
-        name,
-        email,
-        phone,
+        patientId,
+        Assignee,
         time,
-        age,
-        date,
         recurrencePattern,
         recurrencePatternLength,
       } = req.body;
@@ -37,31 +34,40 @@ export default isAuthenticated(async function handler(req, res) {
       let newAppointmentRequests = [];
 
       switch (recurrencePattern) {
-        
+
         case RecurrencePattern.WEEK:
           const weeklyDates = generateWeeklyDates(time, recurrencePatternLength);
           for (const date of weeklyDates) {
             //#region Create appointment
             // Create a new appointment
             const newAppointment = new Appointment({
-              name,
-              email,
-              phone,
-              age,
-              time: date,
-              date,
+              patientId,
+              Assignee,
+              time,
             });
-            await newAppointment.save();
-            newAppointments.push(newAppointment);
+
+            try {
+              const val = await newAppointment.validate();
+              if (val)
+                await newAppointment.save();
+              newAppointments.push(newAppointment);
+            } catch (err) {
+              return res.status(400).json({
+                message: Object.values(err.errors)[0].properties.message ?? "error saving the appointments",
+              });
+              // console.log(Object.values(err.errors)[0].properties.message)
+            }
+
 
             // Create a new appointment request
-            const newAppointmentRequest = new AppointmentRequest({
-              patient: req.user.userId, // Assuming the patient is the authenticated user
-              appointment: newAppointment._id,
-            });
-            await newAppointmentRequest.save();
-            newAppointmentRequests.push(newAppointmentRequest);
+            // const newAppointmentRequest = new AppointmentRequest({
+            //   patient: req.user.userId, // Assuming the patient is the authenticated user
+            //   appointment: newAppointment._id,
+            // });
+            // await newAppointmentRequest.save();
+            // newAppointmentRequests.push(newAppointmentRequest);
             //#endregion
+
           }
           res.status(201).json({
             newAppointments,
