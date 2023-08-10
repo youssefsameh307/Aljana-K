@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 import connectMongo from "../../../utils/database";
 import { revalidatePath } from "next/cache";
 import EditUserDataForm from "./EditUserDataForm";
+import * as Yup from "yup";
+
 const ProfileForm = async (context) => {
   // Runs server Side
   await connectMongo(); // connect to database
@@ -22,6 +24,58 @@ const ProfileForm = async (context) => {
   async function handleSubmit(formData: FormData) {
     "use server";
     await connectMongo();
+
+    //#region Validate User inputs server side and resend user errors client side    
+    try {
+      const schema = Yup.object({
+        firstName: Yup.string().matches(
+          /^[^\d]+$/,
+          "First name should not contain numbers"
+        ),
+        lastName: Yup.string().matches(
+          /^[^\d]+$/,
+          "Last name should not contain numbers"
+        ),
+        email: Yup.string().email("Invalid email").test('test-mail-is-unique', 'This email is already used by another user', async (email) => {
+          console.log('from inside the email verifiable')
+          // check if this email is already used by another user         
+          const user = await User.findOne({ email: email })
+          if (user) {
+            return false
+          }
+          return true;
+        })
+        ,
+        phone: Yup.string().matches(
+          /^\+\d{1,3}\d{6,14}$/,
+          "Phone number should be in global format for example +02 000 12345678"
+        ),
+        // Add more fields and validation rules as needed
+      });
+
+      const form_data_to_object = Object.fromEntries(formData);
+
+      await schema.validate(form_data_to_object, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
+    } catch (validationErrors) {
+      // Validation failed
+      const errors = {};
+      let errorUserMessage = "";
+      validationErrors.inner.forEach((error) => {
+        errors[error.path] = error.message;
+        errorUserMessage += `${error.message} \n`;
+      });
+      console.log("validation failed", errorUserMessage);
+      return {
+        error: true,
+        errorMessage: errors,
+        errorUserMessage: errorUserMessage,
+      };
+    }
+    //#endregion
+
     //#region update user in DB
     try {
       const updatedUser = await User.findOneAndUpdate(
@@ -47,17 +101,22 @@ const ProfileForm = async (context) => {
       console.log("User updated and saved:", updatedUser);
       revalidatePath("/profile");
       return {
-        error:false, 
-      }
+        error: false,
+      };
     } catch (error) {
       console.error("Error updating user:", error);
       return {
-        error: true, 
+        error: true,
         errorMessage: error.message,
         errorUserMessage: "An error occurred while updating your profile",
-      }
+      };
     }
     //#endregion
+  }
+  interface ValidationResult {
+    error: boolean;
+    errorMessage: { [key: string]: string };
+    errorUserMessage: string | null;
   }
 
   return (
