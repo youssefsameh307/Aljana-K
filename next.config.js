@@ -2,6 +2,10 @@
 const path = require("path");
 const nextConfig = {
   swcMinify: true,
+  experimental: {
+    appDir: true,
+    serverActions: true,
+  },
   trailingSlash: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
@@ -11,7 +15,6 @@ const nextConfig = {
     locales: ["en", "ar"],
     defaultLocale: "en",
   },
-  
 };
 
 module.exports = nextConfig;
