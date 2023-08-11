@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import DashboardUpdatePatient from '../../../components/Dashboard/DashboardUpdatePatient'
+import DashboardUpdatePatient from "../../../components/Dashboard/DashboardUpdatePatient";
+import UserAvatar from "../../../components/Profile/userAvatar";
 
 const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   async function handleSubmit(formData: FormData) {
-    console.log(formData.get('image'))
+    console.log(formData.get("image"));
     const { error, errorMessage, errorUserMessage } = await formSubmitHandler(
       formData
     );
@@ -17,7 +18,6 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   }
   return (
     <div>
-      <DashboardUpdatePatient id={userData.userId} />
       <div className="signup-area ptb-100">
         <h2>{JSON.stringify(userData)}</h2>
         <div className="container-fluid">
@@ -27,12 +27,22 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
             <div className="col-lg-6 ptb-100">
               <div className="signup-item">
                 <div className="signup-head">
-                  <h2>Sign Up Here</h2>
+                  <h2>Edit info</h2>
                   <p>Edit your account Information</p>
                 </div>
 
                 <div className="signup-form">
                   <form>
+                    <div className="row">
+                      <div className="col-lg-6">
+                        <div className="form-group">
+                          <UserAvatar
+                            username={"john"}
+                            imageUrl={userData.image}
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="form-group">
@@ -103,10 +113,7 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                             type="file"
                             style={{ height: "auto" }}
                           />
-                        
                         </div>
-
-                     
                       </div>
 
                       <div className="col-lg-12">

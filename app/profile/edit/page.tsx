@@ -1,5 +1,6 @@
 import React from "react";
 import SignUpForm from "../../../components/authentication/SignUpForm";
+import UserAvatar from '../../../components/Profile/userAvatar'
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { decodeToken } from "../../../utils/isAuthenticated";
@@ -170,10 +171,13 @@ const ProfileForm = async (context) => {
   }
 
   return (
-    <EditUserDataForm
-      formSubmitHandler={handleSubmit}
-      userData={JSON.parse(JSON.stringify(old_data_user))}
-    />
+    <>
+
+      <EditUserDataForm
+        formSubmitHandler={handleSubmit}
+        userData={JSON.parse(JSON.stringify(old_data_user))}
+      />
+    </>
   );
 };
 
