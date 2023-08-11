@@ -9,6 +9,35 @@ import connectMongo from "../../../utils/database";
 import { revalidatePath } from "next/cache";
 import EditUserDataForm from "./EditUserDataForm";
 import * as Yup from "yup";
+import cloudinary from "cloudinary";
+import multer from "multer";
+import path from "path";
+import { writeFile } from "fs/promises";
+
+
+//#region Image upload Config
+// @ts-ignore
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function generateFilePath(file_name) {
+  const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+  const originalName = path.basename(file_name);
+  const fileNameWithSuffix = uniqueSuffix + "-" + originalName;
+  const filePath = path.join(
+    process.cwd(),
+    "public",
+    "images",
+    "tmp",
+    fileNameWithSuffix
+  );
+  return filePath;
+}
+
+//#endregion
 
 const ProfileForm = async (context) => {
   // Runs server Side
@@ -20,34 +49,39 @@ const ProfileForm = async (context) => {
   const decoded_token: { userId: string } = decodeToken(tokenCookie.value); // decode token
   let old_data_user = await User.findById(decoded_token.userId); // get user from database
 
-
   async function handleSubmit(formData: FormData) {
     "use server";
     await connectMongo();
+    console.log(formData.get("image"));
 
-    //#region Validate User inputs server side and resend user errors client side    
+    //#region Validate User inputs server side and resend user errors client side
     try {
       const schema = Yup.object({
         firstName: Yup.string().matches(
-          /^[^\d]+$/,
+          /^[^\d]*$/,
           "First name should not contain numbers"
         ),
         lastName: Yup.string().matches(
-          /^[^\d]+$/,
+          /^[^\d]*$/,
           "Last name should not contain numbers"
         ),
-        email: Yup.string().email("Invalid email").test('test-mail-is-unique', 'This email is already used by another user', async (email) => {
-          console.log('from inside the email verifiable')
-          // check if this email is already used by another user         
-          const user = await User.findOne({ email: email })
-          if (user) {
-            return false
-          }
-          return true;
-        })
-        ,
+        email: Yup.string()
+          .email("Invalid email")
+          .test(
+            "test-mail-is-unique",
+            "This email is already used by another user",
+            async (email) => {
+              console.log("from inside the email verifiable");
+              // check if this email is already used by another user
+              const user = await User.findOne({ email: email });
+              if (user) {
+                return false;
+              }
+              return true;
+            }
+          ),
         phone: Yup.string().matches(
-          /^\+\d{1,3}\d{6,14}$/,
+          /^(?:\+\d{1,3}\d{6,14})?$/,
           "Phone number should be in global format for example +02 000 12345678"
         ),
         // Add more fields and validation rules as needed
@@ -77,6 +111,22 @@ const ProfileForm = async (context) => {
     //#endregion
 
     //#region update user in DB
+    //#region Upload picture
+    let image = formData.get("image");
+    console.log('image', image)
+    if (image) {      
+        const file: File | null = image as unknown as File;
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const path  = generateFilePath(file.name);;
+        await writeFile(path, buffer);
+
+        const imageResult = await cloudinary.v2.uploader.upload(path)
+        console.log(`successfully uploaded file to cloudinary from ${path}`);
+        formData.set("image", imageResult.secure_url);
+    }
+    
+    //#endregion
     try {
       const updatedUser = await User.findOneAndUpdate(
         { _id: decoded_token.userId }, // Find user by ID

@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import DashboardUpdatePatient from '../../../components/Dashboard/DashboardUpdatePatient'
 
 const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   async function handleSubmit(formData: FormData) {
+    console.log(formData.get('image'))
     const { error, errorMessage, errorUserMessage } = await formSubmitHandler(
       formData
     );
@@ -15,6 +17,7 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   }
   return (
     <div>
+      <DashboardUpdatePatient id={userData.userId} />
       <div className="signup-area ptb-100">
         <h2>{JSON.stringify(userData)}</h2>
         <div className="container-fluid">
@@ -71,7 +74,6 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                             className="form-control"
                             placeholder={userData.email}
                             name="email"
-                            defaultValue={"tooy"}
                           />
                         </div>
                       </div>
@@ -91,6 +93,21 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                         </div>
                       </div>
                     )} */}
+
+                      <div className="col-lg-6">
+                        <div className="form-group">
+                          <input
+                            className="form-control form-control-lg"
+                            id="formFileLg"
+                            name="image"
+                            type="file"
+                            style={{ height: "auto" }}
+                          />
+                        
+                        </div>
+
+                     
+                      </div>
 
                       <div className="col-lg-12">
                         <div className="text-center">

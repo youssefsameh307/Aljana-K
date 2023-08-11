@@ -58,6 +58,9 @@ export default async function handler(req, res) {
       if (req.file) {
         const imageResult = await cloudinary.v2.uploader.upload(req.file.path);
         userFields.image = imageResult.secure_url;
+      } else {
+        // put default user pic 
+        userFields.image = "https://res.cloudinary.com/aljana-k/image/upload/v1647392394/default_user_pic_zqzq9r.png";
       }
 
       const user = new User(userFields);
