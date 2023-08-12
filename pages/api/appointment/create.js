@@ -21,12 +21,13 @@ export default isAuthenticated(async function handler(req, res) {
       }
 
       const {
-        patientId,
-        Assignee,
+        patient,
+        doctor,
         time,
+        reference,
         recurrencePattern,
-        recurrencePatternLength,
-      } = req.body;
+        recurrencePatternLength, 
+      } = req.body; 
 
 
       //#region Appointments handeling recuring
@@ -41,9 +42,10 @@ export default isAuthenticated(async function handler(req, res) {
             //#region Create appointment
             // Create a new appointment
             const newAppointment = new Appointment({
-              patientId,
-              Assignee,
+              patient,
+              doctor,
               time,
+              reference
             });
 
             try {
@@ -55,23 +57,13 @@ export default isAuthenticated(async function handler(req, res) {
               return res.status(400).json({
                 message: Object.values(err.errors)[0].properties.message ?? "error saving the appointments",
               });
-              // console.log(Object.values(err.errors)[0].properties.message)
             }
 
-
-            // Create a new appointment request
-            // const newAppointmentRequest = new AppointmentRequest({
-            //   patient: req.user.userId, // Assuming the patient is the authenticated user
-            //   appointment: newAppointment._id,
-            // });
-            // await newAppointmentRequest.save();
-            // newAppointmentRequests.push(newAppointmentRequest);
-            //#endregion
 
           }
           res.status(201).json({
             newAppointments,
-            newAppointmentRequests,
+            // newAppointmentRequests,
             message: "Appointment Request Sent Successfully",
           });
           break;
@@ -81,28 +73,26 @@ export default isAuthenticated(async function handler(req, res) {
             //#region Create appointment
             // Create a new appointment
             const newAppointment = new Appointment({
-              name,
-              email,
-              phone,
-              age,
-              time: date,
-              date,
+              patient,
+              doctor,
+              time,
+              reference
             });
             await newAppointment.save();
             newAppointments.push(newAppointment);
 
             // Create a new appointment request
-            const newAppointmentRequest = new AppointmentRequest({
-              patient: req.user.userId, // Assuming the patient is the authenticated user
-              appointment: newAppointment._id,
-            });
-            await newAppointmentRequest.save();
-            newAppointmentRequests.push(newAppointmentRequest);
+            // const newAppointmentRequest = new AppointmentRequest({
+            //   patient: req.user.userId, // Assuming the patient is the authenticated user
+            //   appointment: newAppointment._id,
+            // });
+            // await newAppointmentRequest.save();
+            // newAppointmentRequests.push(newAppointmentRequest);
             //#endregion
           }
           res.status(201).json({
             newAppointments,
-            newAppointmentRequests,
+            // newAppointmentRequests,
             message: "Appointment Request Sent Successfully",
           });
           break;
@@ -110,25 +100,23 @@ export default isAuthenticated(async function handler(req, res) {
           //#region Create appointment
           // Create a new appointment
           const newAppointment = new Appointment({
-            name,
-            email,
-            phone,
-            age,
+            patient,
+            doctor,
             time,
-            date,
+            reference
           });
           await newAppointment.save();
 
           // Create a new appointment request
-          const newAppointmentRequest = new AppointmentRequest({
-            patient: req.user.userId, // Assuming the patient is the authenticated user
-            appointment: newAppointment._id,
-          });
-          await newAppointmentRequest.save();
+          // const newAppointmentRequest = new AppointmentRequest({
+          //   patient: req.user.userId, // Assuming the patient is the authenticated user
+          //   appointment: newAppointment._id,
+          // });
+          // await newAppointmentRequest.save();
 
           res.status(201).json({
             newAppointment,
-            newAppointmentRequest,
+            // newAppointmentRequest,
             message: "Appointment Request Sent Successfully",
           });
           //#endregion
