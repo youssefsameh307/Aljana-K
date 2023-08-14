@@ -68,3 +68,5 @@ node_modules/
 
 # public images that are in the tmp folder
 public/images/tmp/*
+
+public/images/
