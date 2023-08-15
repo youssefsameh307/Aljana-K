@@ -10,16 +10,12 @@ export default isAuthenticated(
       const { patientID, doctorID } = req.query;
 
       if (req.method === "PUT") {
-        console.log('updating record')
-        // let record = new Record(req.body);
-        console.log("body:", req.body);
         let {doctor:doctorID, recordID, note} = req.body;
         //#region edit record in the database 
         const filter = { _id: recordID };
 
         // Check if the record exists
         const existingRecord = await Record.findById(recordID);
-        console.log(`record: ${existingRecord}`)
         if (!existingRecord) {
           res.status(404).json({ error: "Record not found" });
           return; 

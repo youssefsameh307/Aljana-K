@@ -98,9 +98,6 @@ const feedbackPatient = ({
         ) : (
           "Not logged in"
         )}
-        <h1>Feedback Patient {JSON.stringify(patientData)}</h1>
-        <h5>{JSON.stringify(error)}</h5>
-        <h6>{JSON.stringify(recordsData)}</h6>
       </div>
     </div>
   );
