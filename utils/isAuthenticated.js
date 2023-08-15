@@ -10,7 +10,7 @@ const isAuthenticated = (handler) => async (req, res) => {
     }
 
     // Verify and decode the JWT token
-    const decodedToken = decodeToken;
+    const decodedToken = decodeToken(token);
     if (!decodedToken) {
       return res.status(401).json({ message: "Unable to decode token" });
     }
