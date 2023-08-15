@@ -27,20 +27,35 @@ const feedbackPatient = ({
 }) => {
   const router = useRouter();
   const { id } = router.query;
-  const [newRecord, setNewRecord] = useState('');
+  const [newRecord, setNewRecord] = useState("");
 
   const handleAddRecord = async () => {
     // Update the URL query parameter and trigger SSR
-    //router.push(`/?data=${inputValue}`);
-    // await axios.post(`http://localhost:3000/api/records/${currentUser.id}/${patientData.id}`, {
-    await axios.post(`http://localhost:3000/api/records/${currentUser.id}/${patientData.id}`, {
-      patient:patientData._id,
-      doctor:currentUser._id, 
-      note:newRecord,
-    })
+    await axios.post(
+      `http://localhost:3000/api/records/${currentUser.id}/${patientData.id}`,
+      {
+        patient: patientData._id,
+        doctor: currentUser._id,
+        note: newRecord,
+      }
+    );
 
-    // trigger server side rendering refresh without full page refresh 
-    router.reload()
+    // trigger server side rendering refresh without full page refresh
+    router.reload();
+  };
+
+  const handleEditRecord = async (recordID, updatedRecord) => {
+    console.log(`updating record ${recordID} to ${updatedRecord}`);
+    await axios.put(
+      `http://localhost:3000/api/records/${currentUser.id}/edit/${recordID}`,
+      {
+        doctor: currentUser._id,
+        recordID: recordID,
+        note: updatedRecord,
+      }
+    );
+    // refresh page
+    router.reload();
   };
 
   return (
@@ -58,7 +73,10 @@ const feedbackPatient = ({
           bgImage="page-title-one"
         />
 
-        <RecordsViewer records={recordsData} />
+        <RecordsViewer
+          records={recordsData}
+          handleEditRecord={handleEditRecord}
+        />
 
         <h1>Add Record</h1>
         <input
