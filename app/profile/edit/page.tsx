@@ -1,6 +1,6 @@
 import React from "react";
 import SignUpForm from "../../../components/authentication/SignUpForm";
-import UserAvatar from '../../../components/Profile/userAvatar'
+import UserAvatar from "../../../components/Profile/userAvatar";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { decodeToken } from "../../../utils/isAuthenticated";
@@ -8,13 +8,12 @@ import User from "../../../models/userModel";
 import { redirect } from "next/navigation";
 import connectMongo from "../../../utils/database";
 import { revalidatePath } from "next/cache";
-import EditUserDataForm from "./EditUserDataForm";
+import EditUserDataForm from "../../../components/Profile/EditUserDataForm";
 import * as Yup from "yup";
 import cloudinary from "cloudinary";
 import multer from "multer";
 import path from "path";
 import { writeFile } from "fs/promises";
-
 
 //#region Image upload Config
 // @ts-ignore
@@ -114,19 +113,19 @@ const ProfileForm = async (context) => {
     //#region update user in DB
     //#region Upload picture
     let image = formData.get("image");
-    console.log('image', image)
-    if (image) {      
-        const file: File | null = image as unknown as File;
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const path  = generateFilePath(file.name);;
-        await writeFile(path, buffer);
+    console.log("image", image);
+    if (image) {
+      const file: File | null = image as unknown as File;
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const path = generateFilePath(file.name);
+      await writeFile(path, buffer);
 
-        const imageResult = await cloudinary.v2.uploader.upload(path)
-        console.log(`successfully uploaded file to cloudinary from ${path}`);
-        formData.set("image", imageResult.secure_url);
+      const imageResult = await cloudinary.v2.uploader.upload(path);
+      console.log(`successfully uploaded file to cloudinary from ${path}`);
+      formData.set("image", imageResult.secure_url);
     }
-    
+
     //#endregion
     try {
       const updatedUser = await User.findOneAndUpdate(
@@ -172,7 +171,6 @@ const ProfileForm = async (context) => {
 
   return (
     <>
-
       <EditUserDataForm
         formSubmitHandler={handleSubmit}
         userData={JSON.parse(JSON.stringify(old_data_user))}

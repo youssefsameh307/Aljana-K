@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import DashboardUpdatePatient from "../../../components/Dashboard/DashboardUpdatePatient";
-import UserAvatar from "../../../components/Profile/userAvatar";
+import DashboardUpdatePatient from "../Dashboard/DashboardUpdatePatient";
+import UserAvatar from "./userAvatar";
 
 const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -88,15 +88,15 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                         </div>
                       </div>
 
-                      {/* {errorMessage && (
-                      <div className="col-lg-12">
-                        <div className="alert alert-danger" role="alert">
-                          {errorMessage}
+                      {errorMessage && (
+                        <div className="col-lg-12">
+                          <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {successMessage && (
+                      {/* {successMessage && (
                       <div className="col-lg-12">
                         <div className="alert alert-success" role="alert">
                           {successMessage}
@@ -135,7 +135,6 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
           </div>
         </div>
       </div>
-      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };
