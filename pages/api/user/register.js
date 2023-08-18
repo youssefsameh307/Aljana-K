@@ -37,12 +37,15 @@ export default async function handler(req, res) {
   try {
     await connectMongo();
     if (req.method === "POST") {
+      console.log(req.body['firstName']);
+
 
       // Check that all required fields to create are present
       if (!checkRequiredFields(req, User)) {
         let fields = missingFields(req, User)
         return res.status(400).json({ message: `${fields} is required` });
       }
+
 
       // Create a new instance of the User model with the user data
       const userFields = {

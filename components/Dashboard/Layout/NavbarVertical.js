@@ -3,7 +3,7 @@ import Link from "next/link";
 import menuItems from "./routes/menuItems.json";
 import { useRouter } from "next/navigation";
 
-const NavbarVertical = ({ menuItems, controlNavbar }) => {
+const NavbarVertical = ({ menuItems, controlNavbar, patientAccess }) => {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -87,6 +87,7 @@ const NavbarVertical = ({ menuItems, controlNavbar }) => {
 // Default properties 
 NavbarVertical.defaultProps = {
   menuItems: menuItems,
+  patientAccess: false,
 };
 
 export default NavbarVertical;

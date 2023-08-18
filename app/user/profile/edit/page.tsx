@@ -1,14 +1,14 @@
 import React from "react";
-import SignUpForm from "../../../components/authentication/SignUpForm";
-import UserAvatar from "../../../components/Profile/userAvatar";
+import SignUpForm from "../../../../components/authentication/SignUpForm";
+import UserAvatar from "../../../../components/Profile/userAvatar";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { decodeToken } from "../../../utils/isAuthenticated";
-import User from "../../../models/userModel";
+import { decodeToken } from "../../../../utils/isAuthenticated";
+import User from "../../../../models/userModel";
 import { redirect } from "next/navigation";
-import connectMongo from "../../../utils/database";
+import connectMongo from "../../../../utils/database";
 import { revalidatePath } from "next/cache";
-import EditUserDataForm from "../../../components/Profile/EditUserDataForm";
+import EditUserDataForm from "../../../../components/Profile/EditUserDataForm";
 import * as Yup from "yup";
 import cloudinary from "cloudinary";
 import multer from "multer";
@@ -112,19 +112,23 @@ const ProfileForm = async (context) => {
 
     //#region update user in DB
     //#region Upload picture
+    // @ts-ignore
+    // ! TODO: Find a way so that to detect if an image was sent or not
     let image = formData.get("image");
-    console.log("image", image);
-    if (image) {
-      const file: File | null = image as unknown as File;
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const path = generateFilePath(file.name);
-      await writeFile(path, buffer);
+    const file: File | null = image as File;
+      if (file){
+        const bytes = await file.arrayBuffer();
+        if(bytes.byteLength > 0){
+        const buffer = Buffer.from(bytes);
+        const path = generateFilePath(file.name);
+        await writeFile(path, buffer);
 
-      const imageResult = await cloudinary.v2.uploader.upload(path);
-      console.log(`successfully uploaded file to cloudinary from ${path}`);
-      formData.set("image", imageResult.secure_url);
-    }
+        const imageResult = await cloudinary.v2.uploader.upload(path);
+        console.log(`successfully uploaded file to cloudinary from ${path}`);
+        formData.set("image", imageResult.secure_url);
+        }
+      }
+    
 
     //#endregion
     try {

@@ -5,6 +5,7 @@ import UserAvatar from "./userAvatar";
 
 const EditUserDataForm = ({ formSubmitHandler, userData }) => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState<string|null>(null);
   async function handleSubmit(formData: FormData) {
     console.log(formData.get("image"));
     const { error, errorMessage, errorUserMessage } = await formSubmitHandler(
@@ -12,25 +13,23 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
     );
     if (error) {
       setErrorMessage(errorUserMessage);
+      setSuccessMessage(null)
     } else {
       setErrorMessage(null);
+      setSuccessMessage("Your profile updated successfully");
     }
   }
   return (
     <div>
-      <div className="signup-area ptb-100">
-        <h2>{JSON.stringify(userData)}</h2>
+      <div className="dashboard_apppointment">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-6 pl-0"></div>
-
-            <div className="col-lg-6 ptb-100">
-              <div className="signup-item">
+            <div className="col-lg-12">
+              <div className="signup-item" style={{ maxWidth: "none" }}>
                 <div className="signup-head">
                   <h2>Edit info</h2>
                   <p>Edit your account Information</p>
                 </div>
-
                 <div className="signup-form">
                   <form>
                     <div className="row">
@@ -88,22 +87,6 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                         </div>
                       </div>
 
-                      {errorMessage && (
-                        <div className="col-lg-12">
-                          <div className="alert alert-danger" role="alert">
-                            {errorMessage}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* {successMessage && (
-                      <div className="col-lg-12">
-                        <div className="alert alert-success" role="alert">
-                          {successMessage}
-                        </div>
-                      </div>
-                    )} */}
-
                       <div className="col-lg-6">
                         <div className="form-group">
                           <input
@@ -127,6 +110,20 @@ const EditUserDataForm = ({ formSubmitHandler, userData }) => {
                           </button>
                         </div>
                       </div>
+                      {errorMessage && (
+                        <div className="col-lg-12">
+                          <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                          </div>
+                        </div>
+                      )}
+                      {successMessage && (
+                      <div className="col-lg-12">
+                        <div className="alert alert-success" role="alert">
+                          {successMessage}
+                        </div>
+                      </div>
+                    )}
                     </div>
                   </form>
                 </div>

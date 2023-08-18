@@ -30,7 +30,7 @@
         },
         {
           "name": "All Patients",
-          "url": "/allPatients"
+          "url": "/secretary/allPatients"
         }
       ]
     }

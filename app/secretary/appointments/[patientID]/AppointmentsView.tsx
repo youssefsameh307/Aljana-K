@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-function DashboardAllPatients() {
+function AppointmentsView({appointemnts}: {appointemnts: }) {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
@@ -28,11 +28,11 @@ function DashboardAllPatients() {
 
   const handleDelete = async (userId) => {
     try {
-      setLoading(true);
-      await axios.delete(`/api/user/delete/${userId}`); // Adjust the endpoint URL as needed
-      setPatients((prevPatients) =>
-        prevPatients.filter((patient) => patient._id !== userId)
-      );
+    //   setLoading(true);
+    //   await axios.delete(`/api/user/delete/${userId}`); // Adjust the endpoint URL as needed
+    //   setPatients((prevPatients) =>
+    //     prevPatients.filter((patient) => patient._id !== userId)
+    //   );
       setSuccessMessage("User deleted successfully");
       setErrorMessage("");
       setLoading(false);
@@ -51,8 +51,8 @@ function DashboardAllPatients() {
     //increase search capabilities, extend to category and tags
     if (myQuery) {
       const result = questions.filter((item) => {
-        const { _id, __v, ...rest } = item;
-        return Object.values(rest).some((x) => x.includes(myQuery));
+        // const { _id, __v, ...rest } = item;
+        // return Object.values(rest).some((x) => x.includes(myQuery));
       });
       return result;
     } else return questions;
@@ -113,7 +113,7 @@ function DashboardAllPatients() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPatients.map((patient) => (
+                  {/* {filteredPatients.map((patient) => (
                     <tr key={patient._id}>
                       <td>{patient._id}</td>
                       <td>
@@ -145,14 +145,16 @@ function DashboardAllPatients() {
                             <i className="icofont-ui-delete"></i>
                           </button>
                           <button onClick={() => console.log}>
-                            <Link href={`/secretary/appointments/${patient._id}`}>
+                            <Link
+                              href={`/secretary/appointments/${patient._id}`}
+                            >
                               <i className="fa fa-address-book"></i>
                             </Link>
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
                 </tbody>
               </table>
             </div>
@@ -163,4 +165,4 @@ function DashboardAllPatients() {
   );
 }
 
-export default DashboardAllPatients;
+export default AppointmentsView;

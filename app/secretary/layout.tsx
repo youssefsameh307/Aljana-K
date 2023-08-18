@@ -17,7 +17,6 @@ export default function RootLayout({
 
   return (
     <section>
-      <TopHeader />
 
       <div className={controlNavbar ? "dashboard active" : "dashboard"}>
         <NavbarVertical controlNavbar={controlNavbar} />

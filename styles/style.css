@@ -4728,15 +4728,17 @@ footer {
   gap: 5px;
 }
 
-.dashboard_apppointment .table-responsive .table .actions button {
+.dashboard_apppointment .table-responsive .table .actions button i,
+.dashboard_apppointment .table-responsive .table .actions button a {
   border: none;
-  color: #ffffff;
+  color: #000000;
 }
 
-.dashboard_apppointment .table-responsive .table .actions button:first-child {
-  background-color: #28a745;
+/*Add specifc colors for actions buttons in a table*/
+/* .dashboard_apppointment .table-responsive .table .actions button:first-child {
+  background-color: #ffffff;
 }
 
 .dashboard_apppointment .table-responsive .table .actions button:last-child {
-  background-color: #ff4757;
-}
+  background-color: #ffffff;
+} */

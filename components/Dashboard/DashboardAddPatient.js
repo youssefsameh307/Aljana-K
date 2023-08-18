@@ -30,8 +30,9 @@ function DashboardAddPatient() {
       formData.append("password", password);
       formData.append("role", role);
       formData.append("image", imageFile);
+      console.log(firstName, lastName, email, phone, password, role, imageFile);
 
-      const response = await axios.post("/api/user/register", formData, {
+      const response = await axios.post("/api/user/register-user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
