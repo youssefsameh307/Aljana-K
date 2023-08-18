@@ -3,8 +3,9 @@ import User from "./userModel";
 
 const appointmentSchema = new mongoose.Schema(
   {
-    patientId: {
+    patient: {
       type: Schema.Types.ObjectId,
+      required: true,
       ref: 'User',
       validate: {
         validator: async (v) => {
@@ -21,8 +22,13 @@ const appointmentSchema = new mongoose.Schema(
       type: Date,
       required: true
     },
-    Assignee: {
+    reference: {
+      type: String,
+      required: true
+    },
+    doctor: {
       type: Schema.Types.ObjectId,
+      required: true,
       ref: 'User',
       validate: {
         validator: async (v) => {
