@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-function AppointmentsView({appointemnts}: {appointemnts: }) {
+function AppointmentsView({appointemnts}) {
   const [loading, setLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
