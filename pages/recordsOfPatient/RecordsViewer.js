@@ -70,7 +70,9 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
                   <AccordionItem key={index} uuid={index.toString()}>
                     <AccordionItemHeading>
                       <AccordionItemButton>
-                        <span>{formatDateTime(item.createdAt)} </span>
+                        <span suppressHydrationWarning={true} >
+                          {formatDateTime(item.createdAt)}{" "}
+                        </span>
                         <span className="ml-auto">
                           {editingIndex === index ? (
                             <button

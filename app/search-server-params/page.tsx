@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import User, { UserModel } from "../../models/userModel";
 import SeachInputField from "./searchInputField";
 import connectMongo from "../../utils/database";
-
+import AppointmentPage from '../../components/Common/appointment/appointmentPage'
 let users: UserModel[] = [];
 const Page = async ({
   searchParams,
@@ -46,6 +46,8 @@ const Page = async ({
       <SeachInputField />
       {/* Movies */}
       {/* <MoviesList movies={movies} /> */}
+      <AppointmentPage doctors={users} />
+
       <h3>{JSON.stringify(users)}</h3>
     </div>
   );
