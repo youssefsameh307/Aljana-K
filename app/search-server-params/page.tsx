@@ -1,13 +1,14 @@
 import { revalidatePath } from "next/cache";
 import User, { UserModel } from "../../models/userModel";
-import SearchServerActions from "./searchInputField";
+import SeachInputField from "./searchInputField";
 import connectMongo from "../../utils/database";
 
 let users: UserModel[] = [];
 const Page = async ({
   searchParams,
+  role,
 }: {
-  searchParams: { search?: string };
+  searchParams: { search?: string }, role?: string;
 }) => {
   const searchQuery = searchParams.search ?? "";
   await connectMongo();
@@ -42,7 +43,7 @@ const Page = async ({
   return (
     <div>
       {/* Search */}
-      <SearchServerActions />
+      <SeachInputField />
       {/* Movies */}
       {/* <MoviesList movies={movies} /> */}
       <h3>{JSON.stringify(users)}</h3>

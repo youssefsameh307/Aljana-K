@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Input } from "./input";
 import Spinner from "./spinner";
 
-const SearchServerParams = () => {
+const seachInputField = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [debouncedValue, setDebouncedValue] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
@@ -78,4 +78,4 @@ const SearchServerParams = () => {
   );
 };
 
-export default SearchServerParams;
+export default seachInputField;
