@@ -5,12 +5,17 @@ import { useState } from "react";
 import NavbarVertical from "../../components/Dashboard/Layout/NavbarVertical";
 import DashboardHeader from "../../components/Dashboard/Layout/DashboardHeader";
 import CreateAppointment from "../../components/Common/appointment/appointmentPage";
-import { getDoctors, getPatients } from "../../utils/ApiCalls";
+import { getAppointment, getDoctors, getPatients } from "../../utils/ApiCalls";
+import { useRouter } from "next/router";
+import UpdateAppointment from "../../components/Common/appointment/updateAppointmentPage";
 
 function allPatients() {
     const [controlNavbar, setControlNavbar] = useState(false);
-    const [patients, setPatients] = useState([])
-    const [doctors, setDoctors] = useState([])
+    const [patients, setPatients] = useState([]);
+    const [doctors, setDoctors] = useState([]);
+    const [appointment, setAppointment] = useState([]);
+    const router = useRouter();
+    const { id } = router.query;
 
     const loadData = async () => {
         const pats = await getPatients();
@@ -19,11 +24,24 @@ function allPatients() {
         setDoctors(docs);
     }
 
+    const loadAppointment = async () => {
+        if (id) {
+            const app = await getAppointment(id);
+            setAppointment(app);
+        }
+        return () => { }
+    }
+
     useEffect(() => {
-        loadData();
+        loadData()
     }, [])
 
-    useEffect(() => { }, [patients, doctors])
+    useEffect(() => { loadAppointment() }, [id])
+
+    useEffect(() => {
+    }, [patients, doctors, appointment])
+
+
     return (
         <>
             <div className={controlNavbar ? "dashboard active" : "dashboard"}>
@@ -36,7 +54,7 @@ function allPatients() {
                     />
 
                     <div className="mt-5 px-4 container-fluid">
-                        {patients && doctors && <CreateAppointment patients={patients} doctors={doctors} />}
+                        {patients && doctors && appointment._id && <UpdateAppointment patients={patients} doctors={doctors} appointment={appointment} />}
                     </div>
                 </div>
             </div>

@@ -25,11 +25,38 @@ export const getDoctors = async () => {
     }
 }
 
+export const getAppointment = async (id) => {
+    try {
+        console.log("id client req");
+        console.log(id);
+        const { data } = await axiosInstance({
+            method: 'get',
+            url: `/appointment/${id}`,
+        });
+        return data.patientAppointment;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export const saveAppointment = async (appointment) => {
     try {
         const { data } = await axiosInstance({
             method: 'post',
             url: 'appointment/create',
+            data: { ...appointment }
+        });
+        return data.users;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const updateAppointment = async (appointment, id) => {
+    try {
+        const { data } = await axiosInstance({
+            method: 'patch',
+            url: `appointment/${id}`,
             data: { ...appointment }
         });
         return data.users;

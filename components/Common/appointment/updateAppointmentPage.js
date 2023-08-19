@@ -1,13 +1,14 @@
-"use client"
+
 import React, { useEffect, useState } from "react";
 import { Formik, ErrorMessage, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
-import { saveAppointment } from "../../../utils/ApiCalls";
+import { saveAppointment, updateAppointment } from "../../../utils/ApiCalls";
 import DescriptionSelect from "../select/descriptionSelect";
+import { useRouter } from "next/router";
 
 
-const CreateAppointment = ({ doctors = [], patients = [] }) => {
-
+const UpdateAppointment = ({ doctors = [], patients = [], appointment }) => {
+    const router = useRouter();
     const selectDoctors = doctors.map((x) => {
         return ({ ...x, value: x._id, label: `${x.firstName} ${x.lastName}`, description: x.email })
     })
@@ -16,14 +17,18 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
         return ({ ...x, value: x._id, label: `${x.firstName} ${x.lastName}`, description: x.email })
     })
 
-    useEffect(() => { }, [doctors, patients]);
+    // const { createdAt, updatedAt, status, _v, _id, ...rest } = appointment;
+    useEffect(() => { }, [appointment]);
 
     return (
         <div className="tw-bg-slate-100 tw-shadow-lg tw-grid">
 
-            <p className="tw-text-2xl tw-justify-self-center tw-mt-4">Create an Appointment</p>
+            <p className="tw-text-2xl tw-justify-self-center tw-mt-4">Update an Appointment</p>
             <Formik
-                initialValues={{}}
+                initialValues={{
+                    ...appointment
+                }}
+                enableReinitialize
                 validationSchema={Yup.object().shape({
                     patient: Yup.string().required('patient is required'),
                     doctor: Yup.string().required('doctor is required'),
@@ -33,7 +38,7 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         console.log(values);
-                        saveAppointment(values).then(() => {
+                        updateAppointment(values, appointment._id).then(() => {
                             router.push(`/dashboard`)
                         });
                         setStatus({ success: false });
@@ -54,10 +59,10 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                                 <DescriptionSelect
                                     id="doctor"
                                     name="doctor"
-                                    defaultValue={selectDoctors[0]}
                                     hideSelectedOptions
                                     theme="darker"
-                                    onChange={(value) => { console.log(value) }}
+                                    value={selectDoctors.find((e) => e.value === values.doctor)}
+                                    onChange={handleChange}
                                     options={selectDoctors}
                                 />
                             </div>
@@ -66,19 +71,21 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                                 <DescriptionSelect
                                     id="patient"
                                     name="patient"
-                                    defaultValue={selectPatients[0]}
                                     hideSelectedOptions
                                     theme="darker"
-                                    onChange={(value) => { console.log(value) }}
+                                    value={selectPatients.find((e) => e.value === values.patient)}
+                                    onChange={handleChange}
                                     options={selectPatients}
                                 />
                             </div>
                             <div className='tw-h-12 tw-px-5 tw-w-[49%] tw-my-4'>
                                 <label htmlFor="time-create">Time *</label>
+                                {console.log(values.time)}
                                 <input className="tw-border-blue-600 tw-border tw-p-2 tw-mx-2"
                                     id="time-make"
                                     type="datetime-local"
-                                    value={values.time}
+                                    // value={values.time}
+                                    defaultValue={values.time}
                                     name="time"
                                     onChange={handleChange}
                                     placeholder="Time "
@@ -91,8 +98,6 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                                     </p>
                                 )}
                             </div>
-
-
                             <div className='tw-h-12 tw-px-5 tw-w-[49%] tw-my-4'>
                                 <label htmlFor="reference-create">Reference *</label>
                                 <input className="tw-border-blue-600 tw-border tw-p-2 tw-mx-2"
@@ -107,6 +112,7 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                                     placeholder="reference "
                                     fullWidth
                                     error={Boolean(touched.reference && errors.reference)}
+                                    defaultValue={values.reference}
                                 />
                                 {touched.reference && errors.reference && (
                                     <p error id="helper-text-reference-create">
@@ -116,43 +122,9 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
                             </div>
 
                             <div className='tw-h-12 tw-px-5 tw-w-[49%] tw-my-4'>
-                                <label htmlFor="recurrencePattern-create">recurrence type *</label>
-                                <select className="tw-border-blue-600 tw-border tw-p-2 tw-mx-2" onChange={handleChange} id="recurrencePattern" name="recurrencePattern">
-                                    <option value="NONE">Once</option>
-                                    <option value="WEEK">Weeks</option>
-                                    <option value="MONTH">Months</option>
-                                </select>
-                                {touched.recurrencePattern && errors.recurrencePattern && (
-                                    <p error id="helper-text-recurrencePattern-create">
-                                        {errors.recurrencePattern}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className='tw-h-12 tw-px-5 tw-w-[49%] tw-my-4'>
-                                <label htmlFor="recurrencePatternLength-create">times *</label>
-                                <input className="tw-border-blue-600 tw-border tw-p-2 tw-mx-2"
-                                    id="recurrencePatternLength-make"
-                                    type="number"
-                                    value={values.recurrencePatternLength}
-                                    name="recurrencePatternLength"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    placeholder="recurrencePatternLength "
-                                    fullWidth
-                                    error={Boolean(touched.recurrencePatternLength && errors.recurrencePatternLength)}
-                                />
-                                {touched.recurrencePatternLength && errors.recurrencePatternLength && (
-                                    <p error id="helper-text-reference-create">
-                                        {errors.recurrencePatternLength}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className='tw-h-12 tw-px-5 tw-w-[49%] tw-my-4'>
                                 {/* <AnimateButton> */}
                                 <button className="tw-rounded-md tw-bg-green-400 tw-text-black tw-border tw-p-2 tw-mx-2" type="submit" disableElevation disabled={isSubmitting} fullWidth size="large" variant="contained" color="primary">
-                                    create Appointment
+                                    Update Appointment
                                 </button>
                                 {/* </AnimateButton> */}
                             </div>
@@ -164,4 +136,4 @@ const CreateAppointment = ({ doctors = [], patients = [] }) => {
     )
 }
 
-export default CreateAppointment;
+export default UpdateAppointment;

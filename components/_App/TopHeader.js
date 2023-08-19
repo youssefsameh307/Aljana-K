@@ -25,7 +25,7 @@ const TopHeader = () => {
         setIsLoggedIn(false);
       } else {
         const data = await response.json();
-        console.log(data.message);
+
       }
     } catch (error) {
       console.log("An error occurred while logging out:", error);
