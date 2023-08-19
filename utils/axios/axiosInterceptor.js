@@ -10,6 +10,8 @@ axiosInstance.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
+
+import { redirect } from "next/navigation";
 // Add a response interceptor
 axiosInstance.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger

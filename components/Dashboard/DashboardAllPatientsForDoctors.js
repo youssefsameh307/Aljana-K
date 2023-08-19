@@ -3,28 +3,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-function DashboardAllPatients({patients}) {
-  const [loading, setLoading] = useState(true);
-  // const [patients, setPatients] = useState([]);
+function DashboardAllPatients({ patients }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    fetchPatients();
-  }, []);
-
-  const fetchPatients = async () => {
-    try {
-      const response = await axios.get("/api/user/getallusers"); // Adjust the endpoint URL as needed
-      console.log(response);
-      // setPatients(response.data.users);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      setLoading(false);
-    }
-  };
+  console.log(patients);
 
   const handleDelete = async (userId) => {
     try {
@@ -44,9 +28,6 @@ function DashboardAllPatients({patients}) {
     }
   };
 
-  useEffect(() => {
-    console.log(query);
-  }, [query]);
   const searchFilter = (myQuery, questions = []) => {
     //increase search capabilities, extend to category and tags
     if (myQuery) {
@@ -57,8 +38,6 @@ function DashboardAllPatients({patients}) {
       return result;
     } else return questions;
   };
-
-  const filteredPatients = searchFilter(query, patients);
 
   return (
     <>
@@ -95,9 +74,7 @@ function DashboardAllPatients({patients}) {
             </div>
           )}
 
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
+          {
             <div className="table-responsive">
               <table className="table">
                 <thead>
@@ -113,7 +90,7 @@ function DashboardAllPatients({patients}) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPatients.map((patient) => (
+                  {patients.map((patient) => (
                     <tr key={patient._id}>
                       <td>{patient._id}</td>
                       <td>
@@ -137,15 +114,7 @@ function DashboardAllPatients({patients}) {
                       <td>
                         <div className="actions">
                           <button>
-                            <Link href={`/updatePatient/${patient._id}`}>
-                              <i className="icofont-ui-edit"></i>
-                            </Link>
-                          </button>
-                          <button onClick={() => handleDelete(patient._id)}>
-                            <i className="icofont-ui-delete"></i>
-                          </button>
-                          <button onClick={() => console.log}>
-                            <Link href={`/secretary/appointments/${patient._id}`}>
+                            <Link href={`/doctor/records/${patient._id}`}>
                               <i className="fa fa-address-book"></i>
                             </Link>
                           </button>
@@ -156,7 +125,7 @@ function DashboardAllPatients({patients}) {
                 </tbody>
               </table>
             </div>
-          )}
+          }
         </div>
       </div>
     </>

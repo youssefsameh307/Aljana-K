@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-function DashboardAllPatients({patients}) {
+function AppointmentsView({appointemnts}) {
   const [loading, setLoading] = useState(true);
-  // const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [query, setQuery] = useState("");
@@ -18,7 +18,7 @@ function DashboardAllPatients({patients}) {
     try {
       const response = await axios.get("/api/user/getallusers"); // Adjust the endpoint URL as needed
       console.log(response);
-      // setPatients(response.data.users);
+      setPatients(response.data.users);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching patients:", error);
@@ -28,11 +28,11 @@ function DashboardAllPatients({patients}) {
 
   const handleDelete = async (userId) => {
     try {
-      setLoading(true);
-      await axios.delete(`/api/user/delete/${userId}`); // Adjust the endpoint URL as needed
-      // setPatients((prevPatients) =>
-      //   prevPatients.filter((patient) => patient._id !== userId)
-      // );
+    //   setLoading(true);
+    //   await axios.delete(`/api/user/delete/${userId}`); // Adjust the endpoint URL as needed
+    //   setPatients((prevPatients) =>
+    //     prevPatients.filter((patient) => patient._id !== userId)
+    //   );
       setSuccessMessage("User deleted successfully");
       setErrorMessage("");
       setLoading(false);
@@ -51,8 +51,8 @@ function DashboardAllPatients({patients}) {
     //increase search capabilities, extend to category and tags
     if (myQuery) {
       const result = questions.filter((item) => {
-        const { _id, __v, ...rest } = item;
-        return Object.values(rest).some((x) => x.includes(myQuery));
+        // const { _id, __v, ...rest } = item;
+        // return Object.values(rest).some((x) => x.includes(myQuery));
       });
       return result;
     } else return questions;
@@ -113,7 +113,7 @@ function DashboardAllPatients({patients}) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredPatients.map((patient) => (
+                  {/* {filteredPatients.map((patient) => (
                     <tr key={patient._id}>
                       <td>{patient._id}</td>
                       <td>
@@ -145,14 +145,16 @@ function DashboardAllPatients({patients}) {
                             <i className="icofont-ui-delete"></i>
                           </button>
                           <button onClick={() => console.log}>
-                            <Link href={`/secretary/appointments/${patient._id}`}>
+                            <Link
+                              href={`/secretary/appointments/${patient._id}`}
+                            >
                               <i className="fa fa-address-book"></i>
                             </Link>
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
                 </tbody>
               </table>
             </div>
@@ -163,4 +165,4 @@ function DashboardAllPatients({patients}) {
   );
 }
 
-export default DashboardAllPatients;
+export default AppointmentsView;
