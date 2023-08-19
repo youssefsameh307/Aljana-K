@@ -44,7 +44,7 @@ const feedbackPatient = ({
     router.reload();
   };
 
-  const handleEditRecord = async (recordID, updatedRecord) => {
+  const handleEditRecord = async (recordID, updatedRecord, updatedVisibility) => {
     console.log(`updating record ${recordID} to ${updatedRecord}`);
     await axios.put(
       `http://localhost:3000/api/records/${currentUser.id}/edit/${recordID}`,
@@ -52,11 +52,14 @@ const feedbackPatient = ({
         doctor: currentUser._id,
         recordID: recordID,
         note: updatedRecord,
+        visible: updatedVisibility,
       }
     );
     // refresh page
     router.reload();
   };
+
+  
 
   return (
     <div>

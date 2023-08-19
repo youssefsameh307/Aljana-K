@@ -16,6 +16,10 @@ const recordSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    visible: {
+      type: Boolean,
+      default:false,
+    }
   },
   {
     timestamps: true,

@@ -10,7 +10,7 @@ export default isAuthenticated(
       const { patientID, doctorID } = req.query;
 
       if (req.method === "PUT") {
-        let {doctor:doctorID, recordID, note} = req.body;
+        let {doctor:doctorID, recordID, note, visible} = req.body;
         //#region edit record in the database 
         const filter = { _id: recordID };
 
@@ -28,7 +28,7 @@ export default isAuthenticated(
           return;
         }
 
-        const update = { note }; // Update the note value
+        const update = { note, visible }; // Update the note value
 
         // Use findOneAndUpdate to update the record
         const updatedRecord = await Record.findOneAndUpdate(filter, update, {

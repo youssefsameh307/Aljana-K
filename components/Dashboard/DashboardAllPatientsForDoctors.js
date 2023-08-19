@@ -114,7 +114,7 @@ function DashboardAllPatients({ patients }) {
                       <td>
                         <div className="actions">
                           <button>
-                            <Link href={`/doctor/records/${patient._id}`}>
+                            <Link href={`/recordsOfPatient/${patient._id}`}>
                               <i className="fa fa-address-book"></i>
                             </Link>
                           </button>

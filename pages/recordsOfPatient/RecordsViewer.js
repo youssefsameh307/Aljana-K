@@ -6,17 +6,20 @@ import {
   AccordionItemPanel,
   AccordionItemButton,
 } from "react-accessible-accordion";
-import { FaEdit, FaCheck } from "react-icons/fa"; // Import the edit and tick icons
+import { FaEdit, FaCheck, FaEye } from "react-icons/fa"; // Import the edit and tick icons
 import CustomMessage from "../../components/_App/customMessage";
-
+import ToggleVisibility from "../../components/Common/ui/ToggleVisibility";
 const RecordsViewer = ({ records=[], handleEditRecord }) => {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedNote, setEditedNote] = useState("");
+  const [editedVisiblity,setEditedVisiblity] = useState(false)
+  console.log(records)
   
   //#region handlers
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditedNote(records[index].note);
+    setEditedVisiblity(records[index].visible);
   };
 
   const handleTickClick = async (index) => {
@@ -26,10 +29,13 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
     console.log(records[index])
     const record_to_be_edited = records[index]
     const recordID = record_to_be_edited._id
-    const updatedRecord = editedNote;
-    await handleEditRecord(recordID, updatedRecord)
+    const updatedRecordNote = editedNote;
+    const updatedVisibility = editedVisiblity;
+    await handleEditRecord(recordID, updatedRecordNote, updatedVisibility);
     setEditingIndex(-1);
   };
+
+  
   //#endregion
 
   //#region user readable date formater
@@ -70,25 +76,52 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
                   <AccordionItem key={index} uuid={index.toString()}>
                     <AccordionItemHeading>
                       <AccordionItemButton>
-                        <span suppressHydrationWarning={true} >
+                        <span suppressHydrationWarning={true}>
                           {formatDateTime(item.createdAt)}{" "}
                         </span>
                         <span className="ml-auto">
                           {editingIndex === index ? (
-                            <button
-                              className="edit-button mr-2"
-                              onClick={() => handleTickClick(index)}
-                            >
-                              <FaCheck />
-                            </button>
+                            <>
+                              <button
+                                className="edit-button mr-2"
+                                onClick={() => handleTickClick(index)}
+                              >
+                                <FaCheck />
+                              </button>
+                              <button
+                                className="toggle-button"
+                                onClick={() =>
+                                  setEditedVisiblity(!editedVisiblity)
+                                }
+                              >
+                                <h6>{`${editedVisiblity}`}</h6>
+                                <ToggleVisibility
+                                  showEye={editedVisiblity}
+                                  colorful={true}
+                                />
+                              </button>
+                            </>
                           ) : (
-                            <button
-                              className="edit-button mr-2"
-                              onClick={() => handleEditClick(index)}
-                            >
-                              <FaEdit />
-                            </button>
+                            <>
+                              <button
+                                className="edit-button mr-2"
+                                onClick={() => handleEditClick(index)}
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                className="toggle-button"
+                                onClick={() => handleEditClick(index)}
+                              >
+                                <h6>{`${item.visible}`}</h6>
+                                <ToggleVisibility
+                                  showEye={item.visible}
+                                  colorful={false}
+                                />
+                              </button>
+                            </>
                           )}
+                          {/* Toggle Visibility Button */}
                         </span>
                       </AccordionItemButton>
                     </AccordionItemHeading>
@@ -117,6 +150,8 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
     </div>
   );
 };
+
+
 
 
 
