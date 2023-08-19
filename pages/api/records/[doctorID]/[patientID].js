@@ -16,6 +16,7 @@ export default isAuthenticated(
         });
         res.status(200).json(records);
       }
+      
       if (req.method === "POST") {
         let record = new Record(req.body);
         console.log('body:',req.body);

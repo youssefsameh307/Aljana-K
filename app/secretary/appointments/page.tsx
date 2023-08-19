@@ -8,9 +8,6 @@ import SeachInputField from "../../../components/Common/ui/search/searchInputFie
 import connectMongo from "../../../utils/database";
 import AppointmentPage from "../../../components/Common/appointment/appointmentPage";
 import Calandar from "../../../components/Dashboard/AppointmentsCalandarView";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { decodeToken } from "../../../utils/isAuthenticated";
 let data: AppointmentDocument[] = [];
 const Page = async ({
   searchParams,
@@ -21,14 +18,8 @@ const Page = async ({
 }) => {
   const searchQuery = searchParams.search ?? "";
   await connectMongo();
-  const tokenCookie = cookies().get("token"); // from the cookies sent get the token
-  if (tokenCookie == null) {
-    redirect("/sign-in"); // if there is not token redirect to sign in page
-  }
-  const decoded_token: { userId: string } = decodeToken(tokenCookie.value);
-  const { userId } = decoded_token;
   // Get Initial Data
-  data = await Appointment.find({patient:userId}).exec();
+  data = await Appointment.find({}).exec();
   // console.log("data", data);
   // Search Handler
 

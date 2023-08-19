@@ -9,7 +9,10 @@ import {
   missingFields,
 } from "../../../utils/checkRequiredFields";
 import { RecurrencePattern } from "../../../utils/recurrencePatternEnum";
-import {generateWeeklyDates, generateMonthlyDates} from "../../../utils/dateGenerators";
+import {
+  generateWeeklyDates,
+  generateMonthlyDates,
+} from "../../../utils/dateGenerators";
 export default isAuthenticated(async function handler(req, res) {
   try {
     await connectMongo();
@@ -27,18 +30,19 @@ export default isAuthenticated(async function handler(req, res) {
         time,
         reference,
         recurrencePattern,
-        recurrencePatternLength, 
-      } = req.body; 
-
+        recurrencePatternLength,
+      } = req.body;
 
       //#region Appointments handeling recuring
       let newAppointments = [];
       let newAppointmentRequests = [];
 
       switch (recurrencePattern) {
-
         case RecurrencePattern.WEEK:
-          const weeklyDates = generateWeeklyDates(time, recurrencePatternLength);
+          const weeklyDates = generateWeeklyDates(
+            time,
+            recurrencePatternLength
+          );
           for (const date of weeklyDates) {
             //#region Create appointment
             // Create a new appointment
@@ -46,21 +50,11 @@ export default isAuthenticated(async function handler(req, res) {
               patient,
               doctor,
               time,
-              reference
+              reference,
             });
 
-            try {
-              const val = await newAppointment.validate();
-              if (val)
-                await newAppointment.save();
-              newAppointments.push(newAppointment);
-            } catch (err) {
-              return res.status(400).json({
-                message: Object.values(err.errors)[0].properties.message ?? "error saving the appointments",
-              });
-            }
-
-
+            await newAppointment.save();
+            newAppointments.push(newAppointment);
           }
           res.status(201).json({
             newAppointments,
@@ -69,15 +63,18 @@ export default isAuthenticated(async function handler(req, res) {
           });
           break;
         case RecurrencePattern.MONTH:
-          const monthlyDates = generateMonthlyDates(time, recurrencePatternLength);
+          const monthlyDates = generateMonthlyDates(
+            time,
+            recurrencePatternLength
+          );
           for (const date of monthlyDates) {
             //#region Create appointment
             // Create a new appointment
             const newAppointment = new Appointment({
               patient,
               doctor,
-              time,
-              reference
+              time: date,
+              reference,
             });
             await newAppointment.save();
             newAppointments.push(newAppointment);
@@ -103,8 +100,8 @@ export default isAuthenticated(async function handler(req, res) {
           const newAppointment = new Appointment({
             patient,
             doctor,
-            time,
-            reference
+            time: date,
+            reference,
           });
           await newAppointment.save();
 
@@ -135,5 +132,3 @@ export default isAuthenticated(async function handler(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-

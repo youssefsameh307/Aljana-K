@@ -26,7 +26,7 @@ const CreateAppointment = ({ doctors = [], patients = [], appointment = {} }) =>
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
-                        console.log(values);
+                        console.log('values', values)
                         saveAppointment(values);
                         setStatus({ success: false });
                         setSubmitting(false);

@@ -28,7 +28,7 @@ const Page = async ({
   const decoded_token: { userId: string } = decodeToken(tokenCookie.value);
   const { userId } = decoded_token;
   // Get Initial Data
-  data = await Appointment.find({patient:userId}).exec();
+  data = await Appointment.find({doctor:userId}).exec();
   // console.log("data", data);
   // Search Handler
 

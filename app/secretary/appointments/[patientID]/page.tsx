@@ -75,7 +75,7 @@ async function PatientAppointments({
             const newAppointment = new Appointment({
               patientID,
               Assignee: userId,
-              time:date,
+              time: date,
             });
             await newAppointment.save();
             newAppointments.push(newAppointment);
@@ -98,7 +98,7 @@ async function PatientAppointments({
           await newAppointment.save();
 
           return {
-            newAppointment:newAppointment,
+            newAppointment: newAppointment,
             message: "Appointment Request Sent Successfully",
           };
           //#endregion
@@ -115,14 +115,15 @@ async function PatientAppointments({
       console.error(error);
       return {
         error: true,
-        errorUserMessage: "Invalid form make sure you filled all the required fields",
+        errorUserMessage:
+          "Invalid form make sure you filled all the required fields",
       };
     }
   };
   return (
     <>
       <h1>patient appointemnts</h1>
-      <AppointmentsView appointments={appointments} />
+      {/* <AppointmentsView appointments={appointments} /> */}
       <AppointmentForm handleSubmit={handleSubmit} />
     </>
   );
