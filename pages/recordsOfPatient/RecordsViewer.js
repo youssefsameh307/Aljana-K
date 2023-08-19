@@ -73,11 +73,15 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
                   return dateTime2 - dateTime;
                 })
                 .map((item, index) => (
-                  <AccordionItem key={index} uuid={index.toString()}>
+                  <AccordionItem
+                    key={index}
+                    uuid={index.toString()}
+                    dangerouslySetExpanded={editingIndex === index}
+                  >
                     <AccordionItemHeading>
                       <AccordionItemButton>
                         <span suppressHydrationWarning={true}>
-                          {formatDateTime(item.createdAt)}{" "}
+                          {formatDateTime(item.createdAt)}
                         </span>
                         <span className="ml-auto">
                           {editingIndex === index ? (
