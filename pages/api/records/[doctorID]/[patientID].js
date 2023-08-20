@@ -2,6 +2,7 @@ import authorizeRole from "../../../../utils/authorizeRole";
 import connectMongo from "../../../../utils/database";
 import isAuthenticated from "../../../../utils/isAuthenticated";
 import Record from "../../../../models/recordModule";
+import {sendNewFeedbackMailByID} from "../../../../utils/mail";
 
 export default isAuthenticated(
   authorizeRole(["doctor"])(async function handler(req, res) {
@@ -21,6 +22,7 @@ export default isAuthenticated(
         let record = new Record(req.body);
         console.log('body:',req.body);
         await record.save();
+                
         res.status(201).json(record);
       } else {
         res.status(405).json({ message: "Method Not Allowed" });

@@ -2,6 +2,7 @@ import authorizeRole from "../../../../../utils/authorizeRole";
 import connectMongo from "../../../../../utils/database";
 import isAuthenticated from "../../../../../utils/isAuthenticated";
 import Record from "../../../../../models/recordModule";
+import { sendNewFeedbackMailByID, sendNewFeedbackMailByRecordID } from "../../../../../utils/mail";
 
 export default isAuthenticated(
   authorizeRole(["doctor"])(async function handler(req, res) {
@@ -34,6 +35,11 @@ export default isAuthenticated(
         const updatedRecord = await Record.findOneAndUpdate(filter, update, {
           new: true,
         });
+
+        // send email
+        if(visible){
+          await sendNewFeedbackMailByRecordID(recordID)
+        }
 
         if (updatedRecord) {
           res.status(200).json(updatedRecord);
