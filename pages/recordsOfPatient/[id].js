@@ -16,7 +16,7 @@ import {
   AccordionItemPanel,
   AccordionItemButton,
 } from "react-accessible-accordion";
-import RecordsViewer from "./RecordsViewer";
+import RecordsViewer from "../../components/Dashboard/RecordsViewer";
 import axios from "axios";
 
 const feedbackPatient = ({
@@ -79,6 +79,7 @@ const feedbackPatient = ({
         <RecordsViewer
           records={recordsData}
           handleEditRecord={handleEditRecord}
+          editable={true}
         />
 
         <h1>Add Record</h1>

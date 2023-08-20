@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import {
   Accordion,
@@ -7,9 +8,12 @@ import {
   AccordionItemButton,
 } from "react-accessible-accordion";
 import { FaEdit, FaCheck, FaEye } from "react-icons/fa"; // Import the edit and tick icons
-import CustomMessage from "../../components/_App/customMessage";
-import ToggleVisibility from "../../components/Common/ui/ToggleVisibility";
-const RecordsViewer = ({ records=[], handleEditRecord }) => {
+import CustomMessage from "../_App/customMessage";
+import ToggleVisibility from "../Common/ui/ToggleVisibility";
+
+
+
+const RecordsViewer = ({ records=[], handleEditRecord=()=>{}, editable=false }) => {
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedNote, setEditedNote] = useState("");
   const [editedVisiblity,setEditedVisiblity] = useState(false)
@@ -76,13 +80,14 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
                   <AccordionItem
                     key={index}
                     uuid={index.toString()}
-                    dangerouslySetExpanded={editingIndex === index}
+                    dangerouslySetExpanded={(editingIndex === index)?true:undefined}
                   >
                     <AccordionItemHeading>
                       <AccordionItemButton>
                         <span suppressHydrationWarning={true}>
                           {formatDateTime(item.createdAt)}
                         </span>
+                        {editable ? (
                         <span className="ml-auto">
                           {editingIndex === index ? (
                             <>
@@ -125,8 +130,8 @@ const RecordsViewer = ({ records=[], handleEditRecord }) => {
                               </button>
                             </>
                           )}
-                          {/* Toggle Visibility Button */}
                         </span>
+                        ):(<></>)}
                       </AccordionItemButton>
                     </AccordionItemHeading>
                     <AccordionItemPanel>
