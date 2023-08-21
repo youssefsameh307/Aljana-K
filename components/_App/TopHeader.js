@@ -1,8 +1,11 @@
 "use client"
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 const TopHeader = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [atClient, setAtClient] = useState(false);
+
+  const router = useRouter();
   useEffect(() => {
     setAtClient(true)
     // Check if the user is logged in
@@ -21,8 +24,10 @@ const TopHeader = () => {
       if (response.ok) {
         // Perform logout logic here
         // Clear user data from localStorage and update isLoggedIn state
+        console.log("logged out")
         localStorage.removeItem("user");
         setIsLoggedIn(false);
+        router.push('/')
       } else {
         const data = await response.json();
 

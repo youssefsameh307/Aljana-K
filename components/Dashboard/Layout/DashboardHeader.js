@@ -1,6 +1,9 @@
+import { useRouter } from "next/router";
 import React from "react";
 
 function DashboardHeader(props) {
+
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -9,7 +12,8 @@ function DashboardHeader(props) {
       });
 
       if (response.ok) {
-        setIsLoggedIn(false);
+        localStorage.removeItem("user");
+        router.push('/')
       } else {
         const data = await response.json();
 
