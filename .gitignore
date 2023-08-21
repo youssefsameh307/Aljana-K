@@ -66,5 +66,7 @@ node_modules/
 .env
 .env.local
 
+# public images that are in the tmp folder
+public/images/tmp/*
 
 public/images/

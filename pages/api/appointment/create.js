@@ -9,6 +9,10 @@ import {
   missingFields,
 } from "../../../utils/checkRequiredFields";
 import { RecurrencePattern } from "../../../utils/recurrencePatternEnum";
+import {
+  generateWeeklyDates,
+  generateMonthlyDates,
+} from "../../../utils/dateGenerators";
 export default isAuthenticated(async function handler(req, res) {
   try {
     await connectMongo();
@@ -21,43 +25,59 @@ export default isAuthenticated(async function handler(req, res) {
       }
 
       const {
-        patientId,
-        Assignee,
+        patient,
+        doctor,
         time,
+        reference,
         recurrencePattern,
         recurrencePatternLength,
       } = req.body;
-
 
       //#region Appointments handeling recuring
       let newAppointments = [];
       let newAppointmentRequests = [];
 
       switch (recurrencePattern) {
-
         case RecurrencePattern.WEEK:
-          const weeklyDates = generateWeeklyDates(time, recurrencePatternLength);
+          const weeklyDates = generateWeeklyDates(
+            time,
+            recurrencePatternLength
+          );
           for (const date of weeklyDates) {
             //#region Create appointment
             // Create a new appointment
             const newAppointment = new Appointment({
-              patientId,
-              Assignee,
+              patient,
+              doctor,
               time,
+              reference,
             });
 
-            try {
-              const val = await newAppointment.validate();
-              if (val)
-                await newAppointment.save();
-              newAppointments.push(newAppointment);
-            } catch (err) {
-              return res.status(400).json({
-                message: Object.values(err.errors)[0].properties.message ?? "error saving the appointments",
-              });
-              // console.log(Object.values(err.errors)[0].properties.message)
-            }
-
+            await newAppointment.save();
+            newAppointments.push(newAppointment);
+          }
+          res.status(201).json({
+            newAppointments,
+            // newAppointmentRequests,
+            message: "Appointment Request Sent Successfully",
+          });
+          break;
+        case RecurrencePattern.MONTH:
+          const monthlyDates = generateMonthlyDates(
+            time,
+            recurrencePatternLength
+          );
+          for (const date of monthlyDates) {
+            //#region Create appointment
+            // Create a new appointment
+            const newAppointment = new Appointment({
+              patient,
+              doctor,
+              time: date,
+              reference,
+            });
+            await newAppointment.save();
+            newAppointments.push(newAppointment);
 
             // Create a new appointment request
             // const newAppointmentRequest = new AppointmentRequest({
@@ -67,42 +87,10 @@ export default isAuthenticated(async function handler(req, res) {
             // await newAppointmentRequest.save();
             // newAppointmentRequests.push(newAppointmentRequest);
             //#endregion
-
           }
           res.status(201).json({
             newAppointments,
-            newAppointmentRequests,
-            message: "Appointment Request Sent Successfully",
-          });
-          break;
-        case RecurrencePattern.MONTH:
-          const monthlyDates = generateMonthlyDates(time, recurrencePatternLength);
-          for (const date of monthlyDates) {
-            //#region Create appointment
-            // Create a new appointment
-            const newAppointment = new Appointment({
-              name,
-              email,
-              phone,
-              age,
-              time: date,
-              date,
-            });
-            await newAppointment.save();
-            newAppointments.push(newAppointment);
-
-            // Create a new appointment request
-            const newAppointmentRequest = new AppointmentRequest({
-              patient: req.user.userId, // Assuming the patient is the authenticated user
-              appointment: newAppointment._id,
-            });
-            await newAppointmentRequest.save();
-            newAppointmentRequests.push(newAppointmentRequest);
-            //#endregion
-          }
-          res.status(201).json({
-            newAppointments,
-            newAppointmentRequests,
+            // newAppointmentRequests,
             message: "Appointment Request Sent Successfully",
           });
           break;
@@ -110,25 +98,23 @@ export default isAuthenticated(async function handler(req, res) {
           //#region Create appointment
           // Create a new appointment
           const newAppointment = new Appointment({
-            name,
-            email,
-            phone,
-            age,
-            time,
-            date,
+            patient,
+            doctor,
+            time: date,
+            reference,
           });
           await newAppointment.save();
 
           // Create a new appointment request
-          const newAppointmentRequest = new AppointmentRequest({
-            patient: req.user.userId, // Assuming the patient is the authenticated user
-            appointment: newAppointment._id,
-          });
-          await newAppointmentRequest.save();
+          // const newAppointmentRequest = new AppointmentRequest({
+          //   patient: req.user.userId, // Assuming the patient is the authenticated user
+          //   appointment: newAppointment._id,
+          // });
+          // await newAppointmentRequest.save();
 
           res.status(201).json({
             newAppointment,
-            newAppointmentRequest,
+            // newAppointmentRequest,
             message: "Appointment Request Sent Successfully",
           });
           //#endregion
@@ -146,27 +132,3 @@ export default isAuthenticated(async function handler(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-function generateWeeklyDates(startDate, numWeeks) {
-  const dates = [];
-  const currentDate = new Date(startDate);
-
-  for (let i = 0; i < numWeeks; i++) {
-    dates.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 7);
-  }
-
-  return dates;
-}
-
-function generateMonthlyDates(startDate, numMonths) {
-  const dates = [];
-  const currentDate = new Date(startDate);
-
-  for (let i = 0; i < numMonths; i++) {
-    dates.push(new Date(currentDate));
-    currentDate.setMonth(currentDate.getMonth() + 1);
-  }
-
-  return dates;
-}

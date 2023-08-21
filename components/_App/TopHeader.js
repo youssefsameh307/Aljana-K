@@ -1,8 +1,10 @@
+"use client"
 import React, { useEffect, useState } from "react";
 const TopHeader = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [atClient, setAtClient] = useState(false);
   useEffect(() => {
+    setAtClient(true)
     // Check if the user is logged in
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -29,6 +31,8 @@ const TopHeader = () => {
       console.log("An error occurred while logging out:", error);
     }
   };
+
+  
   return (
     
     <>
@@ -37,42 +41,23 @@ const TopHeader = () => {
           <div className="row align-items-center">
             <div className="col-sm-8 col-lg-9">
               <div className="header-top-item">
-                <div className="header-top-left">
-                  <ul>
-                    <li>
-                      <a href="tel:+07554332322">
-                        <i className="icofont-ui-call"></i>
-                        Call : +07 554 332 322
-                      </a>
-                    </li>
-                    <li>
-                      <a href="mailto:hello@disin.com">
-                        <i className="icofont-ui-message"></i>
-                        hello@disin.com
-                      </a>
-                    </li>
-                    <li>
-                      <i className="icofont-location-pin"></i>
-                      210-27 Quadra, Canada
-                    </li>
-                  </ul>
-                </div>
+               
               </div>
             </div>
 
             <div className="col-sm-4 col-lg-3">
               <div className="header-top-item">
                 <div className="header-top-right">
-                  {/* <ul className="lang-list">
+                  <ul className="lang-list">
                     <li>
                       <a href="/">EN</a>
                     </li>
                     <li>
                       <a href="/ar">AR</a>
                     </li>
-                  </ul> */}
+                  </ul> 
 
-                  {/* <ul>
+                   <ul>
                     <li>
                       <a href="https://www.facebook.com/" target="_blank">
                         <i className="icofont-facebook"></i>
@@ -93,7 +78,7 @@ const TopHeader = () => {
                         <i className="icofont-instagram"></i>
                       </a>
                     </li>
-                  </ul> */}
+                  </ul>
 
                   <div className="buttons">
                   {!isLoggedIn && (

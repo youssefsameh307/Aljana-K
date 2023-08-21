@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -6,18 +7,20 @@ function DashboardAppointment() {
   const [loading, setLoading] = useState(true);
   const [updateMessage, setUpdateMessage] = useState("");
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const response = await axios.get("/api/appointment/getPatientAppointment");
-        setAppointments(response.data.patientAppointment);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
 
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get("/api/appointment/getPatientAppointment");
+      console.log(response);
+      setAppointments(response.data.patientAppointment);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAppointments();
   }, []);
 
@@ -26,11 +29,11 @@ function DashboardAppointment() {
 
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString(undefined, dateOptions);
-  
-  
+
+
     return `${formattedDate}`;
   };
-  
+
 
   const handleUpdateStatus = async (requestId, status) => {
     try {
@@ -64,36 +67,27 @@ function DashboardAppointment() {
               <table className="table">
                 <thead>
                   <tr>
-                  <th scope="col">user Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Doctor</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {appointments.length > 0 ? (
                     appointments.map((appointment) => (
                       <tr key={appointment._id}>
-                      <td>
-                          {appointment.patient ? appointment.patient._id : ""}
+                        <td>
+                          {appointment?.patientId || ""}
                         </td>
                         <td>
-                          {appointment.appointment ? appointment.appointment.name : ""}
+                          {appointment?.Assignee || ""}
                         </td>
                         <td>
-                          {appointment.appointment ? appointment.appointment.email : ""}
+                          {appointment?.status || ""}
                         </td>
-                        <td>
-                          {appointment.appointment ? appointment.appointment.phone : ""}
-                        </td>
-                        
-                        <td>{formatDate(appointment.appointment.date)}</td>
-                        <td>{appointment.appointment.time}</td>
-                        <td>{appointment.appointment.status}</td>
+                        <td>{formatDate(appointment.time)}</td>
                         <td>
                           <div className="actions">
                             <button

@@ -1,14 +1,14 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-
-function DashboardAllPatients() {
+function DashboardAllPatients({patients}) {
   const [loading, setLoading] = useState(true);
-  const [patients, setPatients] = useState([]);
+  // const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     fetchPatients();
@@ -17,7 +17,8 @@ function DashboardAllPatients() {
   const fetchPatients = async () => {
     try {
       const response = await axios.get("/api/user/getallusers"); // Adjust the endpoint URL as needed
-      setPatients(response.data.users);
+      console.log(response);
+      // setPatients(response.data.users);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching patients:", error);
@@ -29,9 +30,9 @@ function DashboardAllPatients() {
     try {
       setLoading(true);
       await axios.delete(`/api/user/delete/${userId}`); // Adjust the endpoint URL as needed
-      setPatients((prevPatients) =>
-        prevPatients.filter((patient) => patient._id !== userId)
-      );
+      // setPatients((prevPatients) =>
+      //   prevPatients.filter((patient) => patient._id !== userId)
+      // );
       setSuccessMessage("User deleted successfully");
       setErrorMessage("");
       setLoading(false);
@@ -43,19 +44,19 @@ function DashboardAllPatients() {
     }
   };
 
-  useEffect(() => { console.log(query) }, [query])
+  useEffect(() => {
+    console.log(query);
+  }, [query]);
   const searchFilter = (myQuery, questions = []) => {
-    //increase search capabilities, extend to category and tags 
+    //increase search capabilities, extend to category and tags
     if (myQuery) {
       const result = questions.filter((item) => {
         const { _id, __v, ...rest } = item;
-        return Object.values(rest).some((x) => x.includes(myQuery))
-      })
-      return result
-    }
-    else
-      return questions
-  }
+        return Object.values(rest).some((x) => x.includes(myQuery));
+      });
+      return result;
+    } else return questions;
+  };
 
   const filteredPatients = searchFilter(query, patients);
 
@@ -64,10 +65,11 @@ function DashboardAllPatients() {
       <div className="dashboard_apppointment">
         <h3 className="mb-0">All Patients</h3>
 
-
-        <input placeholder="search..." className="tw-w-full tw-p-3 tw-drop-shadow-md tw-bg-white tw-rounded tw-border-gray-800 tw-border-2 tw-mt-6" onChange={(x) => setQuery(x.target.value)}>
-
-        </input>
+        <input
+          placeholder="search..."
+          className="tw-w-full tw-p-3 tw-drop-shadow-md tw-bg-white tw-rounded tw-border-gray-800 tw-border-2 tw-mt-6"
+          onChange={(x) => setQuery(x.target.value)}
+        ></input>
 
         {/* <TextField
           InputProps={{
@@ -119,7 +121,11 @@ function DashboardAllPatients() {
                           <img
                             src={patient.image}
                             alt={`${patient.firstName} ${patient.lastName}`}
-                            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              borderRadius: "50%",
+                            }}
                           />
                         )}
                       </td>
@@ -131,13 +137,17 @@ function DashboardAllPatients() {
                       <td>
                         <div className="actions">
                           <button>
-                            <Link style={{ color: "white" }} href={`/updatePatient/${patient._id}`}>
+                            <Link href={`/updatePatient/${patient._id}`}>
                               <i className="icofont-ui-edit"></i>
                             </Link>
-
                           </button>
                           <button onClick={() => handleDelete(patient._id)}>
                             <i className="icofont-ui-delete"></i>
+                          </button>
+                          <button onClick={() => console.log}>
+                            <Link href={`/secretary/appointments/${patient._id}`}>
+                              <i className="fa fa-address-book"></i>
+                            </Link>
                           </button>
                         </div>
                       </td>

@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       const token = jwt.sign(
         { userId: user._id, email: user.email, role: user.role }, // Include the role in the token payload
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "10h" }
       );
 
       // Store the token in a cookie

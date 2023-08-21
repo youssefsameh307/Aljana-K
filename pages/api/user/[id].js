@@ -29,7 +29,7 @@ export const config = {
   },
 };
 export default isAuthenticated(
-  authorizeRole(['doctor'])( async function handler(req, res) {
+  authorizeRole(['doctor', 'secretary'])( async function handler(req, res) {
   try {
     await connectMongo();
 

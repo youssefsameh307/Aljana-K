@@ -53,6 +53,10 @@ userSchema.pre("save", async function (next) {
     }
 });
 
+// Create indexes for frequently searched fields
+userSchema.index({ firstName: 'text', lastName: 'text', email: 'text', phone: 'text', role: 'text' });
+
+
 const User = mongoose.models.User || mongoose.model('User', userSchema, 'users');
 
 export default User;

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
-import menuItems from "./routes/menuItems.json";
-import { useRouter } from "next/router";
+import menuItems from "./routes/menuItems-user.json";
+import { useRouter } from "next/navigation";
 
-const NavbarVertical = (props) => {
+const NavbarVertical = ({ menuItems, controlNavbar }) => {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -21,11 +21,11 @@ const NavbarVertical = (props) => {
     if (!children) {
       return null;
     }
-  
+
     return children.map((subOption) => {
       if (!subOption.children) {
         const isActive = currentPath === subOption.url; // Check against the "url" property
-  
+
         return (
           <div className="nav-item" key={subOption.name}>
             <Link
@@ -39,17 +39,15 @@ const NavbarVertical = (props) => {
           </div>
         );
       }
-  
+
       const isParentActive = subOption.children.some(
         (child) => currentPath === child.url
       );
-  
+
       return (
         <div className="nav-item" key={subOption.name}>
           <a
-            className={`nav-link ${
-              isParentActive ? "active" : ""
-            }`}
+            className={`nav-link ${isParentActive ? "active" : ""}`}
             onClick={() => handleClick(subOption.name)}
             style={{ cursor: "pointer" }}
           >
@@ -68,10 +66,10 @@ const NavbarVertical = (props) => {
       );
     });
   };
-  
 
   return (
     <>
+      <h1>{controlNavbar}</h1>
       <div className="navbar-vertical">
         <Link href="/" className="nav-brand">
           <img src="/images/logo.png" alt="logo" />
@@ -84,6 +82,12 @@ const NavbarVertical = (props) => {
       </div>
     </>
   );
+};
+
+// Default properties 
+NavbarVertical.defaultProps = {
+  menuItems: menuItems,
+  patientAccess: false,
 };
 
 export default NavbarVertical;
