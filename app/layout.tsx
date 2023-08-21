@@ -15,8 +15,7 @@ import "react-accessible-accordion/dist/fancy-example.css";
 import "swiper/css";
 import "swiper/css/bundle";
 /* styles/global.css */
-import '@fortawesome/fontawesome-free/css/all.css';
-//#endregion 
+
 
 
 import dynamic from "next/dynamic";

@@ -11,7 +11,7 @@ export default isAuthenticated(authorizeRole(["secretary", "doctor"])(async func
     await connectMongo();
 
     if (req.method === "GET") {
-      const patientAppointment = await Appointment.find()
+      const patientAppointment = await Appointment.find().populate("patient").populate("doctor");
 
       res.status(200).json({
         patientAppointment

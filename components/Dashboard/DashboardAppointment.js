@@ -1,17 +1,18 @@
-"use client"
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axiosInstance from "../../utils/axios/axiosInstance";
+import { useRouter } from "next/router"
 
 function DashboardAppointment() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updateMessage, setUpdateMessage] = useState("");
-
+  const router = useRouter()
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("/api/appointment/getPatientAppointment");
-      console.log(response);
+      const response = await axiosInstance
+        .get("/appointment/getPatientAppointment")
+
       setAppointments(response.data.patientAppointment);
       setLoading(false);
     } catch (error) {
@@ -20,9 +21,7 @@ function DashboardAppointment() {
     }
   };
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
+
 
   const formatDate = (dateString) => {
     const dateOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -34,10 +33,19 @@ function DashboardAppointment() {
     return `${formattedDate}`;
   };
 
+  const handleUpdate = (id) => {
+    router.push(`/appointment/${id}`)
+  }
+
+  const handleDelete = async (id) => {
+    await axiosInstance.delete(`/appointment/${id}`).then(() => {
+      setAppointments((old) => old.filter((candidate) => candidate._id !== id))
+    })
+  };
 
   const handleUpdateStatus = async (requestId, status) => {
     try {
-      await axios.patch("/api/appointment/approval", { requestId, status });
+      await axiosInstance.patch("/appointment/approval", { requestId, status });
       // Update the status in the appointments list
       setAppointments((prevAppointments) => {
         return prevAppointments.map((appointment) => {
@@ -52,6 +60,14 @@ function DashboardAppointment() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  useEffect(() => {
+
+  }, [appointments])
 
   return (
     <>
@@ -79,10 +95,10 @@ function DashboardAppointment() {
                     appointments.map((appointment) => (
                       <tr key={appointment._id}>
                         <td>
-                          {appointment?.patientId || ""}
+                          {`${appointment?.patient.firstName} ${appointment?.patient.firstName}` || ""}
                         </td>
                         <td>
-                          {appointment?.Assignee || ""}
+                          {`${appointment?.doctor.firstName} ${appointment?.doctor.firstName}` || ""}
                         </td>
                         <td>
                           {appointment?.status || ""}
@@ -91,12 +107,12 @@ function DashboardAppointment() {
                         <td>
                           <div className="actions">
                             <button
-                              onClick={() => handleUpdateStatus(appointment.appointment._id, "approved")}
+                              onClick={() => handleUpdate(appointment._id)}
                             >
                               <i className="icofont-tick-mark"></i>
                             </button>
                             <button
-                              onClick={() => handleUpdateStatus(appointment.appointment._id, "rejected")}
+                              onClick={() => handleDelete(appointment._id)}
                             >
                               <i className="icofont-close"></i>
                             </button>
