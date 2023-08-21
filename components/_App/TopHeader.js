@@ -32,32 +32,32 @@ const TopHeader = () => {
     }
   };
 
-  
+
   return (
-    
+
     <>
       <div className="header-top">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-sm-8 col-lg-9">
               <div className="header-top-item">
-               
+
               </div>
             </div>
 
             <div className="col-sm-4 col-lg-3">
               <div className="header-top-item">
                 <div className="header-top-right">
-                  <ul className="lang-list">
+                  <ul style={{ display: "flex" }} className="lang-list">
                     <li>
                       <a href="/">EN</a>
                     </li>
                     <li>
                       <a href="/ar">AR</a>
                     </li>
-                  </ul> 
+                  </ul>
 
-                   <ul>
+                  <ul style={{ display: "flex" }}>
                     <li>
                       <a href="https://www.facebook.com/" target="_blank">
                         <i className="icofont-facebook"></i>
@@ -81,7 +81,7 @@ const TopHeader = () => {
                   </ul>
 
                   <div className="buttons">
-                  {!isLoggedIn && (
+                    {!isLoggedIn && (
                       <>
                         <a href="/sign-in" className="login">
                           Login
@@ -95,8 +95,8 @@ const TopHeader = () => {
                       <a className="register" onClick={handleLogout}>
                         Logout
                       </a>
-                    )} 
-                    
+                    )}
+
                   </div>
                 </div>
               </div>
