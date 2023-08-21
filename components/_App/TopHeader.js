@@ -80,10 +80,10 @@ const TopHeader = () => {
                     </li>
                   </ul>
 
-                  <div className="buttons">
+                  <div className="buttons tw-flex tw-mx-4 tw-items-center">
                     {!isLoggedIn && (
                       <>
-                        <a href="/sign-in" className="login">
+                        <a href="/sign-in" className="register">
                           Login
                         </a>
                         <a href="/sign-up" className="register">

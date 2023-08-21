@@ -11,10 +11,10 @@ const Page = async () => {
   patients = await User.find({
     role: "patient",
   }).exec();
-  
+
   return (
     <>
-      <DashboardAllPatients patients={JSON.parse(JSON.stringify(patients))}/>
+      <DashboardAllPatients patients={JSON.parse(JSON.stringify(patients))} />
     </>
   );
 }

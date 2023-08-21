@@ -4,10 +4,10 @@ import { Formik, ErrorMessage, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { saveAppointment } from "../../../utils/ApiCalls";
 import DescriptionSelect from "../select/descriptionSelect";
-
+import { useRouter } from "next/router";
 
 const CreateAppointment = ({ doctors = [], patients = [] }) => {
-
+    const router = useRouter();
     const selectDoctors = doctors.map((x) => {
         return ({ ...x, value: x._id, label: `${x.firstName} ${x.lastName}`, description: x.email })
     })

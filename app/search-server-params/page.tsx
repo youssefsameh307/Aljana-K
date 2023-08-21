@@ -6,9 +6,8 @@ import AppointmentPage from '../../components/Common/appointment/appointmentPage
 let users: UserModel[] = [];
 const Page = async ({
   searchParams,
-  role,
 }: {
-  searchParams: { search?: string }, role?: string;
+  searchParams: { search?: string }
 }) => {
   const searchQuery = searchParams.search ?? "";
   await connectMongo();
@@ -38,7 +37,7 @@ const Page = async ({
 
   revalidatePath("search-server-params");
 
- 
+
 
   return (
     <div>

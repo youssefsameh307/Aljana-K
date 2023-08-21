@@ -40,7 +40,7 @@ const SignInForm = () => {
       if (response.ok) {
         // Login successful
         setErrorMessage("");
-        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("user", JSON.stringify({user:true}));
         // Redirect to dashboard or desired page
         window.location.href = "/";
       } else {
