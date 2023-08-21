@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import NavbarVertical from "../components/Dashboard/Layout/NavbarVertical";
+import menuItemsSecretary from "../components/Dashboard/Layout/routes/menuItems-secretary.json";
 import DashboardHeader from "../components/Dashboard/Layout/DashboardHeader";
 import DashboardAddPatient from "../components/Dashboard/DashboardAddPatient";
 
@@ -9,7 +10,10 @@ function addPatient() {
   return (
     <>
       <div className={controlNavbar ? "dashboard active" : "dashboard"}>
-        <NavbarVertical controlNavbar={controlNavbar} />
+        <NavbarVertical
+          controlNavbar={controlNavbar}
+          menuItems={menuItemsSecretary}
+        />
 
         <div className="dash-page-content">
           <DashboardHeader
@@ -18,7 +22,7 @@ function addPatient() {
           />
 
           <div className="mt-5 px-4 container-fluid">
-            <DashboardAddPatient/>
+            <DashboardAddPatient />
           </div>
         </div>
       </div>

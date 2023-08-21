@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "name": "Appointment",
+      "url": "/doctor/appointments",
+      "icon": "icofont-calendar"
+    },
+    {
+      "name": "Patient",
+      "icon": "icofont-business-man-alt-1",
+      "children": [
+        {
+          "name": "All Patients",
+          "url": "/doctor/allPatients"
+        }
+      ]
+    }
+  ]
+}

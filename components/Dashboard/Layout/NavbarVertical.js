@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
-import menuItems from "./routes/menuItems.json";
+import menuItems from "./routes/menuItems-user.json";
 import { useRouter } from "next/navigation";
 
-const NavbarVertical = ({ menuItems, controlNavbar, patientAccess }) => {
+const NavbarVertical = ({ menuItems, controlNavbar }) => {
   const router = useRouter();
   const currentPath = router.pathname;
 

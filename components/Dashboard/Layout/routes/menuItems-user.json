@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "name": "Appointment",
+      "url": "/user/appointments",
+      "icon": "icofont-calendar"
+    },
+    {
+      "name": "Edit Profile",
+      "url": "/user/profile/edit",
+      "icon": "icofont-profile"
+    },
+    {
+      "name": "Doctors Feedback",
+      "icon": "icofont-business-man-alt-1",
+      "url": "/user/records"
+    }
+  ]
+}

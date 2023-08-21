@@ -1,6 +1,7 @@
 "use client";
 import TopHeader from "../../components/_App/TopHeader";
 import NavbarVertical from "../../components/Dashboard/Layout/NavbarVertical";
+import menuItemsForSecretary from '../../components/Dashboard/Layout/routes/menuItems-secretary.json'
 import DashboardHeader from "../../components/Dashboard/Layout/DashboardHeader";
 import { useState } from "react";
 export const metadata = {
@@ -17,9 +18,11 @@ export default function RootLayout({
 
   return (
     <section>
-
       <div className={controlNavbar ? "dashboard active" : "dashboard"}>
-        <NavbarVertical controlNavbar={controlNavbar} />
+        <NavbarVertical
+          controlNavbar={controlNavbar}
+          menuItems={menuItemsForSecretary}
+        />
 
         <div className="dash-page-content">
           <DashboardHeader
