@@ -1,6 +1,28 @@
+import { useRouter } from "next/router";
 import React from "react";
 
 function DashboardHeader(props) {
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/user/logout", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("user");
+        router.push('/')
+      } else {
+        const data = await response.json();
+
+      }
+    } catch (error) {
+      console.log("An error occurred while logging out:", error);
+    }
+  };
+
   return (
     <>
       <div className="dash-header">
@@ -11,7 +33,7 @@ function DashboardHeader(props) {
           >
             <img src="/images/menu-icon.svg" alt="menu" />
           </div>
-          <div className="header-logout">Logout</div>
+          <button onClick={() => { handleLogout() }} className="header-logout">Logout</button>
         </div>
       </div>
     </>

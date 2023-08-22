@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import connectMongo from "../../utils/database";
+import connectMongo from "../../utils/dbConnect";
 import User from "../../models/userModel";
 // TO GET THE DATA OF THE CURRENT USER VIA THE JWT
 export default async function handler(req, res) {

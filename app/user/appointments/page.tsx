@@ -14,10 +14,8 @@ import { decodeToken } from "../../../utils/isAuthenticated";
 let data: AppointmentDocument[] = [];
 const Page = async ({
   searchParams,
-  role,
 }: {
   searchParams: { search?: string };
-  role?: string;
 }) => {
   const searchQuery = searchParams.search ?? "";
   await connectMongo();
@@ -28,7 +26,7 @@ const Page = async ({
   const decoded_token: { userId: string } = decodeToken(tokenCookie.value);
   const { userId } = decoded_token;
   // Get Initial Data
-  data = await Appointment.find({patient:userId}).exec();
+  data = await Appointment.find({ patient: userId }).exec();
   // console.log("data", data);
   // Search Handler
 

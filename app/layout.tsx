@@ -38,7 +38,6 @@ export default function RootLayout({
     <html lang="en">
       {/* <TopHeader /> // ? There is bad error throwing atm as shown here https://github.com/vercel/next.js/issues/36636
        // ? Should be fixed in the next stable release. */}
-
       <body>{children}</body>
     </html>
   );

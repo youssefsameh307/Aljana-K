@@ -11,10 +11,8 @@ import Calandar from "../../../components/Dashboard/AppointmentsCalandarView";
 let data: AppointmentDocument[] = [];
 const Page = async ({
   searchParams,
-  role,
 }: {
   searchParams: { search?: string };
-  role?: string;
 }) => {
   const searchQuery = searchParams.search ?? "";
   await connectMongo();
