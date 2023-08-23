@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 
-function DashboardAllPatients({patients}) {
+function DashboardAllPatients({ patients }) {
   const [loading, setLoading] = useState(true);
   // const [patients, setPatients] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
@@ -47,15 +47,15 @@ function DashboardAllPatients({patients}) {
   useEffect(() => {
     console.log(query);
   }, [query]);
-  const searchFilter = (myQuery, questions = []) => {
+  const searchFilter = (myQuery, patients = []) => {
     //increase search capabilities, extend to category and tags
     if (myQuery) {
-      const result = questions.filter((item) => {
+      const result = patients.filter((item) => {
         const { _id, __v, ...rest } = item;
-        return Object.values(rest).some((x) => x.includes(myQuery));
+        return Object.values(rest).some((x) => String(x).toLowerCase().includes(myQuery));
       });
       return result;
-    } else return questions;
+    } else return patients;
   };
 
   const filteredPatients = searchFilter(query, patients);

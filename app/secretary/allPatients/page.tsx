@@ -8,8 +8,8 @@ import connectMongo from "../../../utils/database";
 let patients: UserModel[] = [];
 const Page = async () => {
   await connectMongo();
-  patients = await User.find({}).exec();
-  
+  patients = await User.find({});
+
   return (
     <>
       <DashboardAllPatients patients={patients} />

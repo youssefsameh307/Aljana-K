@@ -35,7 +35,7 @@ const About = () => {
 
       <TestimonialSlider />
 
-      <LatestBlogPost />
+      {/* <LatestBlogPost /> */}
 
       <Footer />
     </>

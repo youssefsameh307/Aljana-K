@@ -72,7 +72,7 @@ const NavbarVertical = ({ menuItems, controlNavbar }) => {
       <h1>{controlNavbar}</h1>
       <div className="navbar-vertical">
         <Link href="/" className="nav-brand">
-          <img src="/images/logo.png" alt="logo" />
+          <img src="/images/logo11.png" alt="logo" />
         </Link>
         <div className="">
           <nav className="nav-list flex-column d-flex">
