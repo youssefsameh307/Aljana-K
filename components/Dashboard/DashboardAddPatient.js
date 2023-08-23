@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -18,7 +20,7 @@ function DashboardAddPatient() {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      setLoading(true); 
       setErrorMessage("");
       setSuccessMessage("");
 

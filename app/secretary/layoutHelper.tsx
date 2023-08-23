@@ -1,7 +1,7 @@
 "use client";
 import TopHeader from "../../components/_App/TopHeader";
 import NavbarVertical from "../../components/Dashboard/Layout/NavbarVertical";
-import menuItemsForDoctors from '../../components/Dashboard/Layout/routes/menuItems-doctor.json'
+import menuItemsForSecretary from '../../components/Dashboard/Layout/routes/menuItems-secretary.json'
 import DashboardHeader from "../../components/Dashboard/Layout/DashboardHeader";
 import { useState } from "react";
 export const metadata = {
@@ -20,7 +20,7 @@ export default function SecretaryLaout({
     <section>
 
       <div className={controlNavbar ? "dashboard active" : "dashboard"}>
-        <NavbarVertical controlNavbar={controlNavbar} menuItems={menuItemsForDoctors} />
+        <NavbarVertical controlNavbar={controlNavbar} menuItems={menuItemsForSecretary} />
 
         <div className="dash-page-content">
           <DashboardHeader

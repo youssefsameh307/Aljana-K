@@ -8,7 +8,7 @@ import connectMongo from "../../../utils/database";
 let patients: UserModel[] = [];
 const Page = async () => {
   await connectMongo();
-  patients = await User.find({
+  const patients = await User.find({
     role: "patient",
   }).exec();
 

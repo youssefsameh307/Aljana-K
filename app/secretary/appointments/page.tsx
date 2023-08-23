@@ -49,7 +49,7 @@ const Page = async ({
 
       <Calandar appointments={data} />
 
-      <h3>{JSON.stringify(data)}</h3>
+      {/* <h3>{JSON.stringify(data)}</h3> */}
     </div>
   );
 };

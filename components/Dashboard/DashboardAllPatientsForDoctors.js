@@ -8,8 +8,6 @@ function DashboardAllPatients({ patients }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [query, setQuery] = useState("");
 
-  console.log(patients);
-
   const handleDelete = async (userId) => {
     try {
       setLoading(true);
@@ -33,11 +31,13 @@ function DashboardAllPatients({ patients }) {
     if (myQuery) {
       const result = questions.filter((item) => {
         const { _id, __v, ...rest } = item;
-        return Object.values(rest).some((x) => x.includes(myQuery));
+        return Object.values(rest).some((x) => String(x).toLowerCase().includes(myQuery.toLowerCase()));
       });
       return result;
     } else return questions;
   };
+
+  const filteredPatients = searchFilter(query, patients)
 
   return (
     <>
@@ -90,7 +90,7 @@ function DashboardAllPatients({ patients }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patient) => (
+                  {filteredPatients.map((patient) => (
                     <tr key={patient._id}>
                       <td>{patient._id}</td>
                       <td>
