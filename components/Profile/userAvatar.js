@@ -1,6 +1,6 @@
 // components/UserAvatar.js
 import React from "react";
-import styles from "./UserAvatar.module.css"; // Import the CSS module for styling
+import styles from "./userAvatar.module.scss"; // Import the CSS module for styling
 
 const UserAvatar = ({ username, imageUrl }) => {
   return (
