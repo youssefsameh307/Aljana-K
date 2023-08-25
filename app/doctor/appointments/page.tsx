@@ -1,4 +1,3 @@
-"use client"
 import { revalidatePath } from "next/cache";
 // import User, { UserModel } from "../../../models/userModel";
 import Appointment, {
