@@ -54,7 +54,7 @@ const Page = async ({
   return (
     <div>
       {/* Search */}
-      <SeachInputField />
+      {/* <SeachInputField /> */}
 
       <Calandar appointments={data} />
 

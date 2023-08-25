@@ -1,3 +1,4 @@
+"use client"
 import { revalidatePath } from "next/cache";
 // import User, { UserModel } from "../../../models/userModel";
 import Appointment, {
@@ -26,7 +27,7 @@ const Page = async ({
   const decoded_token: { userId: string } = decodeToken(tokenCookie.value);
   const { userId } = decoded_token;
   // Get Initial Data
-  data = await Appointment.find({doctor:userId}).exec();
+  data = await Appointment.find({ doctor: userId }).exec();
   // console.log("data", data);
   // Search Handler
 
@@ -54,7 +55,7 @@ const Page = async ({
   return (
     <div>
       {/* Search */}
-      <SeachInputField />
+      {/* <SeachInputField /> */}
 
       <Calandar appointments={data} />
 

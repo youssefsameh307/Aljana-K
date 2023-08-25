@@ -42,7 +42,7 @@ const Page = async ({
   return (
     <div>
       {/* Search */}
-      <SeachInputField />
+      {/* <SeachInputField /> */}
       {/* Movies */}
       {/* <MoviesList movies={movies} /> */}
       <AppointmentPage doctors={users} />
