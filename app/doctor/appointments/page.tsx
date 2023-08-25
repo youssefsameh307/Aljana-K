@@ -57,8 +57,6 @@ const Page = async ({
       {/* <SeachInputField /> */}
 
       <Calandar appointments={data} />
-
-      <h3>{JSON.stringify(data)}</h3>
     </div>
   );
 };

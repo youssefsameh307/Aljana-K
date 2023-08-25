@@ -46,7 +46,7 @@ const NavbarVertical = ({ menuItems }) => {
       );
 
       return (
-        <div className='dashboard tw-w-[250px]'>
+        <div className='dashboard tw-w-[250px] tw-min-w-[250px]'>
           <div className="nav-item" key={subOption.name}>
             <a
               className={`nav-link ${isParentActive ? "active" : ""}`}
@@ -72,7 +72,7 @@ const NavbarVertical = ({ menuItems }) => {
 
   return (
     <>
-      <div className='dashboard tw-w-[250px]'>
+      <div className='dashboard tw-w-[250px] tw-min-w-[250px]'>
         <div className="navbar-vertical">
           <Link href="/" className="nav-brand">
             <img src="/images/logo11.png" alt="logo" />

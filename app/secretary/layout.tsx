@@ -32,10 +32,10 @@ export default function DoctorLayout({
   return (
     <section>
 
-      <div className='tw-flex tw-flex-row tw-overflow-x-hidden'>
+      <div className='tw-flex tw-flex-row tw-min-w-[250px]'>
         <NavbarVertical menuItems={menuItemsForDoctors} />
 
-        <div className="dash-page-content">
+        <div className="dash-page-content tw-w-full">
           <div className="mt-5 px-4 container-fluid">{children}</div>
         </div>
       </div>
