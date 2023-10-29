@@ -1,7 +1,7 @@
 {
-  "name": "disin",
+  "name": "Aljana",
   "version": "1.4.0",
-  "description": "Disin - React Next Medical Health & Doctors Template",
+  "description": "Aljana Medical Center",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",

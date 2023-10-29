@@ -1,6 +1,9 @@
+import { useRouter } from "next/router";
 import React from "react";
 
 const OurExpertise = () => {
+  const router = useRouter();
+  const lang = router.locale == 'en';
   return (
     <>
       <div className="speciality-area pb-100">
@@ -18,36 +21,40 @@ const OurExpertise = () => {
                     <div className="col-sm-6 col-lg-6">
                       <div className="speciality-inner">
                         <i className="icofont-check-circled"></i>
-                        <h3>Child Care</h3>
+                        <h3>{lang ? 'Treatment of Bone Problems' : 'علاج مشاكل العظام'}</h3>
                         <p>
-                          Lorem ipsum dolor sit amet, is consectetur adipiscing
+                          {lang ? 'We specialize in advanced non-surgical treatments for bone problems, ensuring a swift recovery without the need for surgery.'
+                            : 'نحن متخصصون في العلاجات غير الجراحية المتقدمة لمشاكل العظام، مما يضمن الشفاء السريع دون الحاجة إلى إجراء عملية جراحية.'}
                         </p>
                       </div>
                     </div>
                     <div className="col-sm-6 col-lg-6">
                       <div className="speciality-inner">
                         <i className="icofont-check-circled"></i>
-                        <h3>More Stuff</h3>
+                        <h3>{lang ? 'Pediatric Excellence' : 'التميز في طب الأطفال'}</h3>
                         <p>
-                          Lorem ipsum dolor sit amet, is consectetur adipiscing
+                          {lang ? "Our dedicated pediatric experts provide high-quality care tailored to your child's unique needs, all without surgical procedures."
+                            : 'يقدم خبراؤنا المتخصصون في طب الأطفال رعاية عالية الجودة مصممة خصيصًا لتلبية احتياجات طفلك الفريدة، كل ذلك بدون إجراءات جراحية.'}
                         </p>
                       </div>
                     </div>
                     <div className="col-sm-6 col-lg-6">
                       <div className="speciality-inner">
                         <i className="icofont-check-circled"></i>
-                        <h3>Enough Lab</h3>
+                        <h3>{lang ? 'Brain and Nervous System Care' : 'رعاية الدماغ والجهاز العصبي'}</h3>
                         <p>
-                          Lorem ipsum dolor sit amet, is consectetur adipiscing
+                          {lang ? 'Trust our board-certified neurologists for non-surgical solutions to complex brain and nervous system conditions.'
+                            : 'ثق بأطباء الأعصاب المعتمدين لدينا للحصول على حلول غير جراحية لحالات الدماغ والجهاز العصبي المعقدة.'}
                         </p>
                       </div>
                     </div>
                     <div className="col-sm-6 col-lg-6">
                       <div className="speciality-inner">
                         <i className="icofont-check-circled"></i>
-                        <h3>24 Hour Doctor</h3>
+                        <h3>{lang ? 'Upper Respiratory System' : 'الجهاز التنفسي العلوي'}</h3>
                         <p>
-                          Lorem ipsum dolor sit amet, is consectetur adipiscing
+                          {lang ? 'Breathe easy with our non-surgical treatments for upper respiratory issues, from allergies to lung conditions.'
+                            : 'تنفس بسهولة مع علاجاتنا غير الجراحية لمشاكل الجهاز التنفسي العلوي، بدءًا من الحساسية وحتى أمراض الرئة.'}
                         </p>
                       </div>
                     </div>
@@ -64,7 +71,7 @@ const OurExpertise = () => {
                   <div className="speciality-icon">
                     <i className="icofont-ui-call"></i>
                   </div>
-                  <h3>Emergency Call</h3>
+                  <h3>{lang ? 'Call us on:' : 'اتصل بنا'}</h3>
                   <p>+07 554 332 322</p>
                 </div>
               </div>

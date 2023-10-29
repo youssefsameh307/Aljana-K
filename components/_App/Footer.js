@@ -1,7 +1,10 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Footer = () => {
+  const router = useRouter();
+  const { locale: lang } = router;
   const currentYear = new Date().getFullYear();
   return (
     <>
@@ -11,12 +14,11 @@ const Footer = () => {
             <div className="col-sm-6 col-lg-4">
               <div className="footer-item">
                 <div className="footer-contact pe-2">
-                  <h3>Contact Us</h3>
+                  <h3>{lang ? 'Contact Us' : 'اتصل بنا '}</h3>
                   <ul>
                     <li>
                       <i className="icofont-ui-message"></i>
-                      <a href="mailto:info@disin.com">info@disin.com</a>
-                      <a href="mailto:hello@disin.com">hello@disin.com</a>
+                      <a href="mailto:contact@aljana-medicalcenter.com">contact@aljana-medicalcenter.com</a>
                     </li>
                     <li>
                       <i className="icofont-stock-mobile"></i>
@@ -25,7 +27,8 @@ const Footer = () => {
                     </li>
                     <li>
                       <i className="icofont-location-pin"></i>
-                      210-27 Quadra, Market Street, Victoria Canada
+                      {!lang ? '١٢ ش ٧٦ من ش٩ , المعادى, القاهرة, مصر' : '12 street No. 76 Maadi, Cairo, Egypt '}
+                      
                     </li>
                   </ul>
                 </div>
